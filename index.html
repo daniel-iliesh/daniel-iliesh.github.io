@@ -8,107 +8,59 @@
   <link rel="stylesheet" href="./dist/stylesheet.css">
   <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/animejs@3.0.1/lib/anime.min.js"></script>
+  <script src="https://kit.fontawesome.com/c869041ae8.js" crossorigin="anonymous"></script>
+  <title>Portfolio - Daniel Ilies</title>
 
-
-  <title>Rocket Champ</title>
 </head>
 
 <body>
-  <!-- <a class="link" href="https://ithub-mocha.vercel.app/">ITHUB</a> -->
-
-  <div class="page contact">Contact</div>
-  <div class="page home">Home</div>
-  <div class="page aboutme">About me</div>
-
+  <main id="main">
+    <h1 class="name">Daniel Ilies</h1>
+    <h2 class="title">Web developer</h2>
+    <ul class="projects">
+      
+      <li id="project" class="project">
+        <img src="project_photo" alt="">
+        <h4>Project name</h4>
+      </li>
+      <li id="project" class="project">
+        <img src="project_photo" alt="">
+        <h4>Project name</h4>
+      </li>
+    </ul>
+  </main>
 </body>
 
 <script>
-  document.body.style.overflow = 'hidden';
 
-  const dimensions = {
-    first: ["contact", "home", "aboutme"]
-  }
+  const main = document.getElementById("main");
+  const projects = document.querySelectorAll("#project");
 
-  let currentPage = 1;
-  let currentPosition = 0;
-
-  let swipeUp = anime.timeline({
-    easing: 'easeOutExpo',
-    duration: 750,
-    autoplay: false
-  }).add({
-    targets: "body",
-    scale: 0.8,
-    translateY: `${currentPosition}%`,
-    // scale: 1,
-    duration: 1000,
-    easing: 'easeInOutExpo'
-    , forwards: true
-  })
-
-  let swipeDown = anime({
-    targets: "body",
-    keyframes: [
-      { scale: 0.5 },
-      { translateY: `${currentPosition}%` },
-      { scale: 1 }
-    ],
-    duration: 1000,
-    autoplay: false,
-    easing: 'easeInOutExpo'
-  })
-
-  let swipeRight = anime({
-    targets: "body",
-    keyframes: [
-      { scale: 0.5 },
-      { translateX: `${currentPosition}%` },
-      { scale: 1 }
-    ],
-    duration: 1000,
-    autoplay: false,
-    easing: 'easeInOutExpo'
-  })
-
-  let swipeLeft = anime({
-    targets: "body",
-    keyframes: [
-      { scale: 0.5 },
-      { translateX: `${currentPosition}%` },
-      { scale: 1 }
-    ],
-    duration: 1000,
-    autoplay: false,
-    easing: 'easeInOutExpo'
-  })
-
-  // window.addEventListener('wheel', (event) => {
-  //   if (event.deltaY > 0) {
-  //     swipeUp();
-  //   } else if (event.deltaY < document.body.scrollHeight) {
-  //     swipeDown();
-  //   }
-  // });
-
-  while (false) {
-    document.onkeydown = (e) => {
-      if (e.key == "ArrowDown") {
-        currentPosition -= 100;
-        swipeDown.play();
-      } else if (e.key == "ArrowUp") {
-        swipeUp.play();
-        currentPage -= 1;
-      } else if (e.key == "ArrowLeft") {
-        swipeLeft.play();
-      } else if (e.key == "ArrowRight") {
-        swipeRight.play();
-      }
-      console.log(dimensions.first[currentPage]);
+  class Project {
+    constructor(name, tech, links) {
+      this.name = name; 
+      this.tech = tech; 
+      this.links = links;
     }
   }
 
 
 
+  const getRandomColor = (saturation = 0.9, luminance = 0.6) => {
+    return `hsl( ${Math.random() * 360}, ${saturation*100}%, ${luminance*100}%)`;
+  }
+  
+  setInterval(() => {
+    const currentColor = getRandomColor();
+      main.style.borderColor = "white";
+      main.style.boxShadow = `0px 0px 20px 5px ${currentColor}, 
+                              inset 0px 0px 20px 5px ${currentColor}`;
+      main.style.transform = `rotateX(0deg)`;
+      projects.forEach(element => {
+        element.style.borderColor = getRandomColor(); 
+      });
+  }, 1000)
+  
 </script>
 
 </html>
