@@ -5,12 +5,12 @@
 
 @font-face {
   font-family: "Press Start 2P";
-  src: url("fonts/Press_Start_2P/PressStart2P-Regular.ttf")
+  src: url("fonts/Press_Start_2P/PressStart2P-Regular.ttf");
 }
 
 @font-face {
   font-family: "Fira Code";
-  src: url("fonts/Fira_Code/FiraCode-VariableFont_wght.ttf")
+  src: url("fonts/Fira_Code/FiraCode-VariableFont_wght.ttf");
 }
 
 a {
@@ -47,8 +47,8 @@ body::-webkit-scrollbar {
 main {
   transform: rotateX(90deg);
   padding: 20px;
-  position:absolute;
-  box-sizing:border-box;
+  position: absolute;
+  box-sizing: border-box;
   border: 5px solid transparent;
   box-shadow: 0px 0px 100px 20px white;
   border-radius: 5px;
@@ -65,11 +65,11 @@ main {
   font-family: "Fira Code";
 }
 
-.projects { 
+.projects {
   display: flex;
   flex-direction: column;
   overflow: scroll;
-  height: 100vh;
+  height: 85%;
   list-style-type: none;
   padding: 0;
   margin: 0;
@@ -86,7 +86,6 @@ main {
   transition: ease 2s;
   margin-top: 5px;
   margin-bottom: 5px;
-  
 }
 
 .projectimage {
@@ -106,6 +105,7 @@ main {
 }
 
 .tag {
+  font-size: smaller;
   background-color: transparent;
   color: transparent;
   border-radius: 25px;
@@ -114,4 +114,49 @@ main {
   width: fit-content;
   padding: 2px 5px;
   margin: 2px 5px;
+}
+
+.accordion {
+  background-color: white;
+  margin-top: -5px;
+  border-top: none;
+  display: flex;
+  flex-direction: column;
+  margin-top: -5px;
+  border-top: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.accordion_expandable {
+  background-color: black;
+  max-height: 0;
+  padding: 0 10px;
+  overflow: hidden;
+  transition: max-height 0.5s ease-out;
+}
+
+.rotate_arrow {
+  rotate: 180deg;
+  transition: 0.5s ease-in-out;
+}
+
+i.fa-arrow-down {
+  display: flex;
+  transition: 0.5s ease-in-out;
+  align-self: center;
+  justify-self: center;
+  width: 100%;
+  color: black;
+}
+
+i.fa-arrow-down::before {
+  position: relative;
+  transform: translateX(-50%);
+  left: calc(50%);
+}
+
+.active_accordion {
+  max-height: 500px;
+  transition: max-height 0.5s ease-in;
 }
