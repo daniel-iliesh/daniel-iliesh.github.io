@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,14 +20,22 @@
     <h1 class="name">Daniel Ilies</h1>
     <h2 class="title">Web developer</h2>
     <ul class="projects">
-      
       <li id="project" class="project">
-        <img src="project_photo" alt="">
-        <h4>Project name</h4>
-      </li>
-      <li id="project" class="project">
-        <img src="project_photo" alt="">
-        <h4>Project name</h4>
+        <a href="https://ithub-mocha.vercel.app" target="_blank" rel="noopener noreferrer">
+        <img src="./dist/img/ithub.png" class="projectimage" alt="ithub logo"></a>
+        <div style="width: 100%; padding: 10px; display: flex; flex-direction: column; justify-content: space-between;">
+          <div style="display: flex; justify-content: space-between; width: 100%;" >
+            <a href="https://ithub-mocha.vercel.app" target="_blank" class="projectname">IT-HUB</a>
+            <div class="links">
+              <a href="https://github.com/RocketChamp/ithub" target="_blank" ><i class="fa-brands fa-github"></i> Github</a>
+            </div>
+          </div >
+            <ul class="tags" style="display: flex; ">
+              <li class="tag" id="tag" >reactjs</li>
+              <li class="tag" id="tag" >fullstack</li>
+              <li class="tag" id="tag" >mern_stack</li>
+            </ul>
+        </div>
       </li>
     </ul>
   </main>
@@ -35,11 +45,12 @@
 
   const main = document.getElementById("main");
   const projects = document.querySelectorAll("#project");
+  const tags = document.querySelectorAll("#tag");
 
   class Project {
     constructor(name, tech, links) {
-      this.name = name; 
-      this.tech = tech; 
+      this.name = name;
+      this.tech = tech;
       this.links = links;
     }
   }
@@ -47,20 +58,27 @@
 
 
   const getRandomColor = (saturation = 0.9, luminance = 0.6) => {
-    return `hsl( ${Math.random() * 360}, ${saturation*100}%, ${luminance*100}%)`;
+    return `hsl( ${Math.random() * 360}, ${saturation * 100}%, ${luminance * 100}%)`;
   }
-  
+
   setInterval(() => {
     const currentColor = getRandomColor();
-      main.style.borderColor = "white";
-      main.style.boxShadow = `0px 0px 20px 5px ${currentColor}, 
+    main.style.borderColor = "white";
+    main.style.boxShadow = `0px 0px 20px 5px ${currentColor}, 
                               inset 0px 0px 20px 5px ${currentColor}`;
-      main.style.transform = `rotateX(0deg)`;
-      projects.forEach(element => {
-        element.style.borderColor = getRandomColor(); 
-      });
+    main.style.transform = `rotateX(0deg)`;
+    projects.forEach(element => {
+      element.style.borderColor = getRandomColor();
+    });
+    tags.forEach(element => {
+      const currentColor2 = getRandomColor(0.3, 0.4);
+      element.style.backgroundColor = currentColor2;
+      element.style.boxShadow = `0px 0px 5px 2px ${currentColor2}, 
+                              inset 0px 0px 5px 2px ${currentColor2}`;
+      element.style.color = "white";
+    })
   }, 1000)
-  
+
 </script>
 
 </html>

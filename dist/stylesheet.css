@@ -13,31 +13,47 @@
   src: url("fonts/Fira_Code/FiraCode-VariableFont_wght.ttf")
 }
 
+a {
+  text-decoration: none;
+}
+
+a:visited {
+  color: white;
+  text-decoration: none;
+}
+
 body {
   font-family: "Fira Code";
   background-color: rgb(24, 24, 24);
   padding: 0;
   margin: 0;
   color: white;
-  height: 100vh;
-  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
   display: flex;
   align-content: center;
   align-items: center;
   justify-content: center;
+  position: fixed;
+  overflow-y: scroll;
+}
+
+body::-webkit-scrollbar {
+  display: none;
 }
 
 main {
   transform: rotateX(90deg);
-  /* transform: skew(90, 60deg); */
-  padding: 2rem;
+  padding: 20px;
   position:absolute;
   box-sizing:border-box;
   border: 5px solid transparent;
+  box-shadow: 0px 0px 100px 20px white;
   border-radius: 5px;
-  height: 90%;
-  width: 90%;
-  transition: ease 1s;
+  height: 95%;
+  width: 95%;
+  transition: ease 0.5s;
 }
 
 .name {
@@ -49,6 +65,8 @@ main {
 }
 
 .projects { 
+  display: flex;
+  flex-direction: column;
   overflow: scroll;
   height: 100vh;
   list-style-type: none;
@@ -56,12 +74,43 @@ main {
   margin: 0;
 }
 
+.projects::-webkit-scrollbar {
+  display: none;
+}
+
 .project {
   display: flex;
   color: white;
-  padding: 10px;
   border: 1px solid white;
   transition: ease 2s;
-  margin: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
   
+}
+
+.projectimage {
+  width: 100px;
+}
+
+.projectname {
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+.tags {
+  list-style-type: none;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tag {
+  background-color: transparent;
+  color: transparent;
+  border-radius: 25px;
+  text-align: center;
+  transition: ease-in-out 1s;
+  width: fit-content;
+  padding: 2px 5px;
+  margin: 2px 5px;
 }
