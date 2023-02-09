@@ -54,22 +54,26 @@ main {
   border-radius: 5px;
   height: 95%;
   width: 95%;
-  transition: ease 0.5s;
+  transition: ease .5s;
 }
 
 .name {
   font-family: "Press Start 2P";
+  font-size: large;
 }
 
 .title {
   font-family: "Fira Code";
+  font-size: medium;
 }
 
 .projects {
   display: flex;
+  position: relative;
   flex-direction: column;
-  overflow: scroll;
-  height: 85%;
+  overflow-y: scroll;
+  overflow-x:hidden;
+  height: calc(100% - 90px);
   list-style-type: none;
   padding: 0;
   margin: 0;
@@ -83,7 +87,7 @@ main {
   display: flex;
   color: white;
   border: 1px solid white;
-  transition: ease 2s;
+  transition: ease 0.1s;
   margin-top: 5px;
   margin-bottom: 5px;
 }
@@ -105,12 +109,12 @@ main {
 }
 
 .tag {
-  font-size: smaller;
+  font-size:x-small;
   background-color: transparent;
   color: transparent;
   border-radius: 25px;
   text-align: center;
-  transition: ease-in-out 1s;
+  transition: ease-in-out 0.1s;
   width: fit-content;
   padding: 2px 5px;
   margin: 2px 5px;
@@ -133,30 +137,40 @@ main {
   max-height: 0;
   padding: 0 10px;
   overflow: hidden;
-  transition: max-height 0.5s ease-out;
+  transition: max-height 0.1s ease-out;
+  transition: all 0.1s;
 }
 
 .rotate_arrow {
   rotate: 180deg;
-  transition: 0.5s ease-in-out;
+  transition: 0.1s ease-in-out;
 }
 
 i.fa-arrow-down {
   display: flex;
-  transition: 0.5s ease-in-out;
+  transition: 0.1s ease-in-out;
   align-self: center;
   justify-self: center;
   width: 100%;
   color: black;
 }
 
+i.fa-arrow-down:hover {
+  cursor: pointer;
+}
+
 i.fa-arrow-down::before {
   position: relative;
   transform: translateX(-50%);
-  left: calc(50%);
+  left: 50%;
+  padding: 10px;
 }
 
 .active_accordion {
-  max-height: 500px;
-  transition: max-height 0.5s ease-in;
+  max-height: 10000px;
+  transition: all 0.1s;
+}
+
+.mylinks {
+
 }
