@@ -1,53 +1,75 @@
-::: {#main role="main"}
-::: {style="display:flex; justify-content: space-between; align-items: center;"}
-# Daniel Ilies {#daniel-ilies .name}
+# Nuxt Minimal Starter
 
--   [](https://linkedin.com/in/daniel-iliesh){target="_blank"}
--   [](https://github.com/RocketChamp){target="_blank"}
-:::
+Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
-## Web developer {#web-developer .title}
+## Setup
 
--   [[![ithub
-    logo](./dist/img/ithub.png){.projectimage}](https://ithub-mocha.vercel.app){target="_blank"
-    rel="noopener noreferrer"}]{#project}
+Make sure to install dependencies:
 
-    ::: {style="width: 100%; padding: 10px; display: flex; flex-direction: column; justify-content: space-between;"}
-    ::: {style="display: flex; justify-content: space-between; width: 100%;"}
-    [IT-HUB](https://ithub-mocha.vercel.app){.projectname
-    target="_blank"}
+```bash
+# npm
+npm install
 
-    ::: links
-    [ Github](https://github.com/RocketChamp/ithub){target="_blank"}
-    :::
-    :::
+# pnpm
+pnpm install
 
-    -   [reactjs]{#tag}
-    -   [fullstack]{#tag}
-    -   [mern_stack]{#tag}
-    :::
+# yarn
+yarn install
 
--   [[![ithub
-    logo](./dist/img/otis.png){.projectimage}](OTiS.html){target="_blank"
-    rel="noopener noreferrer"}]{#project}
+# bun
+bun install
+```
 
-    ::: {style="width: 100%; padding: 10px; display: flex; flex-direction: column; justify-content: space-between;"}
-    ::: {style="display: flex; justify-content: space-between; width: 100%;"}
-    [OTiS](OTiS.html){.projectname target="_blank"}
+## Development Server
 
-    ::: links
-    :::
-    :::
+Start the development server on `http://localhost:3000`:
 
-    -   [js]{#tag}
-    -   [DOM]{#tag}
-    -   [regexp]{#tag}
-    -   [es6]{#tag}
-    :::
+```bash
+# npm
+npm run dev
 
--   -   DOM manipulation using JavaScript and jQuery
-    -   ES6 standarts
-    -   RegExp for the template-ing feature
-    -   LocalStorage to save the preferences and templates locally
-    -   Excel files manipulation using xlsx library
-:::
+# pnpm
+pnpm dev
+
+# yarn
+yarn dev
+
+# bun
+bun run dev
+```
+
+## Production
+
+Build the application for production:
+
+```bash
+# npm
+npm run build
+
+# pnpm
+pnpm build
+
+# yarn
+yarn build
+
+# bun
+bun run build
+```
+
+Locally preview production build:
+
+```bash
+# npm
+npm run preview
+
+# pnpm
+pnpm preview
+
+# yarn
+yarn preview
+
+# bun
+bun run preview
+```
+
+Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.

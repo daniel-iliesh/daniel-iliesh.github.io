@@ -1,0 +1,16 @@
+{
+    "title": "Jocul 21",
+    "description": "Am creat un joc de c\u0103r\u021bi folosind JavaScript vanilla pentru a \u00een\u021belege manipularea DOM \u0219i HTML/CSS.",
+    "date": "2019",
+    "technologies": [
+        "JavaScript",
+        "HTML",
+        "CSS"
+    ],
+    "links": {
+        "demo": "https://your-site.com/demo/21-game",
+        "repo": "https://github.com/daniel-iliesh/21-game",
+        "blog": "/res/ro/projects/21-game/blog.md"
+    },
+    "image": "/assets/images/21-game.jpg"
+}

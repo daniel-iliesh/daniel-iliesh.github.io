@@ -1,0 +1,10 @@
+{
+    "name": "defender-bot",
+    "title": "Defender Bot",
+    "description": "Created a LEGO Robot using Python to play a turn-based game, showcasing Python OOP and robotics integration.",
+    "date": "2020",
+    "technologies": [
+        "Python",
+        "LEGO Mindstorms"
+    ]
+}

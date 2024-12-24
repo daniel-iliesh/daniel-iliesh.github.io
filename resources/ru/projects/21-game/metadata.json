@@ -1,0 +1,16 @@
+{
+    "title": "\u0418\u0433\u0440\u0430 21",
+    "description": "\u0421\u043e\u0437\u0434\u0430\u043b \u043a\u0430\u0440\u0442\u043e\u0447\u043d\u0443\u044e \u0438\u0433\u0440\u0443, \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u0443\u044f Vanilla JavaScript, \u0447\u0442\u043e\u0431\u044b \u043f\u043e\u043d\u044f\u0442\u044c \u043c\u0430\u043d\u0438\u043f\u0443\u043b\u044f\u0446\u0438\u0438 \u0441 DOM \u0438 \u043e\u0441\u043d\u043e\u0432\u044b HTML/CSS.",
+    "date": "2019",
+    "technologies": [
+        "JavaScript",
+        "HTML",
+        "CSS"
+    ],
+    "links": {
+        "demo": "https://your-site.com/demo/21-game",
+        "repo": "https://github.com/daniel-iliesh/21-game",
+        "blog": "/res/ru/projects/21-game/blog.md"
+    },
+    "image": "/assets/images/21-game.jpg"
+}

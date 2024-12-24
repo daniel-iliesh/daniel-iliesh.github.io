@@ -1,0 +1,10 @@
+{
+    "name": "wp-responsive",
+    "title": "WordPress Responsive Design",
+    "description": "Optimized WordPress sites for mobile responsiveness, focusing on layout and user experience.",
+    "date": "2019",
+    "technologies": [
+        "WordPress",
+        "CSS"
+    ]
+}
