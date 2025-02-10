@@ -12,6 +12,7 @@
   "dependencies": {
     "@mdi/font": "^7.4.47",
     "@nuxt/eslint": "0.7.2",
+    "@nuxtjs/i18n": "^9.2.0",
     "eslint": "^8.57.0 || ^9.0.0",
     "nuxt": "^3.14.1592",
     "vue": "latest",
