@@ -17,6 +17,7 @@ export default defineNuxtConfig({
       });
     },
     "@nuxtjs/i18n",
+    "@nuxt/content"
   ],
   build: {
     transpile: ["vuetify"],
