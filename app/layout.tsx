@@ -7,6 +7,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Footer from "./components/footer";
 import { baseUrl } from "./sitemap";
+import CalendlyPopupBtn from "./components/calendlyPopupBtn";
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -47,11 +48,18 @@ export default function RootLayout({
     <html
       lang="en"
       className={cx(
-        "text-black bg-white dark:text-white dark:bg-black",
+        "text-black bg-white dark:text-white dark:bg-black mx-auto",
         GeistSans.variable,
-        GeistMono.variable,
+        GeistMono.variable
       )}
     >
+      <head>
+        {/* Calendly widget styles */}
+        <link
+          href="https://assets.calendly.com/assets/external/widget.css"
+          rel="stylesheet"
+        />
+      </head>
       <body className="antialiased max-w-xl mx-4 mt-8 lg:mx-auto">
         <main className="flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0">
           <Navbar />
@@ -59,6 +67,7 @@ export default function RootLayout({
           <Footer />
           <Analytics />
           <SpeedInsights />
+          <CalendlyPopupBtn />
         </main>
       </body>
     </html>

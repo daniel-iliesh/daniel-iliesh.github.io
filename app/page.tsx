@@ -8,7 +8,6 @@ import { GravatarProfile } from "./api/gravatar/types";
 export default async function Page() {
   let data = await fetch("https://thebackend.rocket-champ.com/gravatar");
   const gravatarProfile: GravatarProfile = await data.json();
-  console.log(gravatarProfile.verified_accounts);
 
   data = await fetch("https://thebackend.rocket-champ.com/readme");
   const ghReadme = await data.text();

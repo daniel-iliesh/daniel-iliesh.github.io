@@ -1,12 +1,19 @@
 import Link from 'next/link'
+import { ReactElement } from 'react'
+import { IoMdDownload } from "react-icons/io";
 
-const navItems = {
+const navItems: Record<string, {name: string, target?: string, icon?: ReactElement}> = {
   '/': {
     name: 'me',
   },
   '/blog': {
     name: 'blog',
-  }
+  },
+  '/resume.pdf': {
+    name: 'resume',
+    target: '_blank',
+    icon: <IoMdDownload />
+  },
 }
 
 export function Navbar() {
@@ -18,14 +25,16 @@ export function Navbar() {
           id="nav"
         >
           <div className="flex flex-row space-x-0 pr-10">
-            {Object.entries(navItems).map(([path, { name }]) => {
+            {Object.entries(navItems).map(([path, { name, target, icon }]) => {
               return (
                 <Link
                   key={path}
                   href={path}
-                  className="transition-all hover:text-neutral-800 dark:hover:text-neutral-200 flex align-middle relative py-1 px-2 m-1"
+                  target={target}
+                  className="transition-all hover:text-neutral-800 dark:hover:text-neutral-200 flex align-middle items-center relative py-1 px-2 m-1"
                 >
                   {name}
+                  {icon}
                 </Link>
               )
             })}
