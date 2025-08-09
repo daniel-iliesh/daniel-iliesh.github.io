@@ -32,7 +32,7 @@ export function SpeakNameButton({ name }: SpeakNameButtonProps) {
   const preferredVoice = useMemo(() => {
     if (!voices.length) return undefined;
     // Try to pick an English voice as a reasonable default; fall back to the first voice
-    const englishVoice = voices.find((v) => v.voiceURI == "Daniel");
+    const englishVoice = voices.find((v) => v.name == "Daniel");
     return englishVoice;
   }, [voices]);
 
