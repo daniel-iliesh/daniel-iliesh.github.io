@@ -1,24 +1,21 @@
 import { BlogPosts } from "app/components/posts";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
-import ReadmeContent from "./components/readmeContent";
 import Link from "next/link";
 import { SpeakNameButton } from "app/components/speakNameButton";
-import { GravatarProfile } from "./api/gravatar/types";
+import jsonResume from "../public/resume.json";
 
 export default async function Page() {
-  let data = await fetch("https://thebackend.rocket-champ.com/gravatar");
-  const gravatarProfile: GravatarProfile = await data.json();
-
-  data = await fetch("https://thebackend.rocket-champ.com/readme");
-  const ghReadme = await data.text();
 
   return (
     <section>
       <div className="flex items-center w-full gap-4 mb-8">
         <div className="flex items-center gap-4 w-full">
-          <Link target="_blank" href={gravatarProfile.profile_url}>
+          <Link
+            target="_blank"
+            href={jsonResume.basics.url}
+          >
             <img
-              src={gravatarProfile.avatar_url}
+              src={jsonResume.basics.image}
               alt="Gravatar Profile"
               width={100}
               height={100}
@@ -29,16 +26,18 @@ export default async function Page() {
             <div className="flex justify-between w-full">
               <div className="flex flex-col">
                 <h1 className="text-2xl font-semibold tracking-tighter flex gap-1 items-center">
-                  {gravatarProfile.display_name}
-                  <SpeakNameButton name={gravatarProfile.pronunciation} />
+                  {jsonResume.basics.name}
+                  <SpeakNameButton
+                    name={jsonResume.basics.name}
+                  />
                 </h1>
-                <h2>{gravatarProfile.job_title}</h2>
+                <h2>{jsonResume.basics.label}</h2>
               </div>
               <div className="flex gap-4 items-center">
                 <a
                   href={
-                    gravatarProfile.verified_accounts.find(
-                      (a) => a.service_type == "github"
+                    jsonResume.basics.profiles.find(
+                      (a) => a.network == "GitHub"
                     )?.url
                   }
                   target="_blank"
@@ -51,8 +50,8 @@ export default async function Page() {
                 </a>
                 <a
                   href={
-                    gravatarProfile.verified_accounts.find(
-                      (a) => a.service_type == "linkedin"
+                    jsonResume.basics.profiles.find(
+                      (a) => a.network == "LinkedIn"
                     )?.url
                   }
                   target="_blank"
@@ -66,14 +65,14 @@ export default async function Page() {
               </div>
             </div>
             <p className="text-sm text-gray-300 mt-2">
-              {gravatarProfile.location} | {gravatarProfile.company}
+              {jsonResume.basics.location.city}
             </p>
             <p className="text-sm text-gray-300 flex gap-1">
-              <a href={`mailto:${gravatarProfile.contact_info.email}`}>
-                {gravatarProfile.contact_info.email}
+              <a href={`mailto:${jsonResume.basics.email}`}>
+                {jsonResume.basics.email}
               </a>
-              <a href={`tel:${gravatarProfile.contact_info.cell_phone}`}>
-                {gravatarProfile.contact_info.cell_phone}
+              <a href={`tel:${jsonResume.basics.phone}`}>
+                {jsonResume.basics.phone}
               </a>
             </p>
           </div>
@@ -81,7 +80,8 @@ export default async function Page() {
       </div>
       <div className="mb-4">
         <div className="text-xl text-green-400 font-bold">About me</div>
-        <ReadmeContent htmlContent={ghReadme} />
+        {/* <ReadmeContent htmlContent={jsonResume.basics?.summary} /> */}
+        {jsonResume.basics.summary}
       </div>
       <div className="my-8">
         <BlogPosts />

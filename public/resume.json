@@ -1,0 +1,227 @@
+{
+  "selectedTemplate": 2,
+  "basics": {
+    "name": "Daniel Ilies",
+    "label": "Software Engineer",
+    "email": "iliesh.daniel@gmail.com",
+    "image": "https://2.gravatar.com/avatar/d968116551f1fcd7a8498e06e731087f6847fa163eddd43f1428606fe999b284?size=512&d=initials",
+    "phone": "(+971) 54-753-6361",
+    "url": "https://danielilies.bio",
+    "summary": "A highly skilled and versatile Software Engineer with a Bachelor's degree in Informatics, proficient in full-stack development, AI/Machine Learning, and DevOps practices. Passionate about building robust, scalable applications from conception to deployment.",
+    "location": {
+      "city": "Dubai",
+      "countryCode": "AE",
+      "address": "Dubai"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "daniel-iliesh",
+        "url": "https://github.com/daniel-iliesh"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "daniel-iliesh",
+        "url": "https://linkedin.com/in/daniel-iliesh"
+      }
+    ],
+    "website": "https://daniel-iliesh.github.io"
+  },
+  "education": [
+    {
+      "institution": "University \"1 Decembrie 1918\" of Alba Iulia",
+      "area": "Informatics",
+      "studyType": "Bachelor's Degree",
+      "startDate": "2019-10",
+      "endDate": "2022-07",
+      "score": "9/10",
+      "courses": [
+        "Building a modern fullstack web application (Thesis)"
+      ],
+      "gpa": "9 out of 10"
+    }
+  ],
+  "work": [
+    {
+      "name": "Bigfoot Startup",
+      "location": "Remote, Germany",
+      "description": "Startup developing retargeting platforms",
+      "position": "Full-Stack Engineer",
+      "url": "https://rocket-champ.com/",
+      "startDate": "2025-01",
+      "endDate": "2025-06",
+      "summary": "Collaborated as a core member of a small development team to build the AdsMedia full-stack retargeting platform using Nuxt.js, Vue.js, and TypeScript.",
+      "highlights": [
+        "Functioned as the primary front-end developer and a contributing back-end developer, responsible for architecting and developing key dashboard and form components for campaign management",
+        "Implemented responsive design principles and ensured cross-browser compatibility, delivering a seamless user experience across all devices",
+        "Worked closely with the back-end team on system design and API integration to ensure smooth data flow and application functionality"
+      ]
+    },
+    {
+      "name": "DevelBox",
+      "location": "Iasi, Romania",
+      "description": "Software development company",
+      "position": "Software Developer",
+      "startDate": "2023-06",
+      "endDate": "2025-05",
+      "summary": "Led frontend development projects and engineered AI-powered solutions while collaborating with cross-functional teams.",
+      "highlights": [
+        "Led the frontend refactoring of an exam management platform (examene.umfst.ro/login) using Vue.js and Vuetify, improving user experience and page load times by approximately 25%",
+        "Engineered and deployed an AI-powered browser extension (AdCognition) using TypeScript and TensorFlow.js for real-time ad detection and blocking",
+        "Developed RoboGPT, an Nvidia Isaac Sim extension for controlling robots via natural language commands using LLMs and OpenAI APIs",
+        "Actively engaged in code reviews and collaborated with UI/UX designers to translate complex mockups into functional web pages"
+      ]
+    },
+    {
+      "name": "CGS Romania",
+      "location": "Remote, Romania",
+      "description": "Customer service outsourcing company",
+      "position": "Customer Service Representative",
+      "summary": "Provided customer support while developing innovative automation solutions.",
+      "highlights": [
+        "Won 1st place in a company-wide Innovation contest by developing Otis, a JavaScript-based templating software that automated form-filling and email generation, significantly improving team efficiency",
+        "Honed communication, teamwork, and problem-solving skills while interacting with customers from diverse cultures"
+      ],
+      "startDate": "2022-03",
+      "endDate": "2023-07"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Frontend Development",
+      "level": "Advanced",
+      "keywords": [
+        "JavaScript (ES6+)",
+        "TypeScript",
+        "Vue.js",
+        "React.js",
+        "HTML5",
+        "CSS3",
+        "Tailwind CSS",
+        "Vuetify"
+      ]
+    },
+    {
+      "name": "Backend & AI/ML",
+      "level": "Intermediate",
+      "keywords": [
+        "Node.js",
+        "Python",
+        "Express.js",
+        "MongoDB",
+        "TensorFlow.js",
+        "OpenAI API"
+      ]
+    },
+    {
+      "name": "Development Tools",
+      "level": "Intermediate",
+      "keywords": [
+        "Git",
+        "Docker",
+        "Linux",
+        "CI/CD"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "IT-Hub - MERN Stack Social Media Web Application",
+      "description": "A full-stack social media application built with the MERN stack, demonstrating an understanding of end-to-end web development.",
+      "highlights": [
+        "Designed and developed IT-Hub with a strong focus on building dynamic frontend features using React.js",
+        "Built all UI features using a component-based architecture and effectively managed application state using Redux"
+      ],
+      "keywords": [
+        "React.js",
+        "MongoDB",
+        "Express.js",
+        "Node.js",
+        "Redux",
+        "Component-Based Architecture"
+      ],
+      "url": "https://github.com/daniel-iliesh/ithub",
+      "roles": [
+        "Full-Stack Developer"
+      ],
+      "type": "application"
+    },
+    {
+      "name": "Otis – Customer Support Automation Tool",
+      "description": "An internal tool that won a company innovation award, using JavaScript, jQuery, and RegEx to automate form-filling and email generation for customer support.",
+      "keywords": [
+        "JavaScript",
+        "jQuery",
+        "RegEx",
+        "Automation"
+      ],
+      "roles": [
+        "Developer"
+      ],
+      "entity": "CGS Romania",
+      "type": "application"
+    },
+    {
+      "name": "defender-bot",
+      "description": "A Python-controlled LEGO Mindstorms Micropython robot from university, demonstrating experience with robotics, sensors, and OOP principles.",
+      "keywords": [
+        "Python",
+        "LEGO Mindstorms",
+        "Micropython",
+        "Robotics",
+        "OOP"
+      ],
+      "roles": [
+        "Developer"
+      ],
+      "type": "application"
+    },
+    {
+      "name": "AdCognition",
+      "description": "An AI-powered browser extension for real-time ad detection and blocking.",
+      "keywords": [
+        "TypeScript",
+        "TensorFlow.js",
+        "Browser Extension",
+        "AI"
+      ],
+      "roles": [
+        "Developer"
+      ],
+      "entity": "DevelBox",
+      "type": "application"
+    },
+    {
+      "name": "RoboGPT",
+      "description": "An Nvidia Isaac Sim extension for controlling robots via natural language commands using LLMs and OpenAI APIs.",
+      "keywords": [
+        "Nvidia Isaac Sim",
+        "LLMs",
+        "OpenAI API",
+        "Natural Language Processing"
+      ],
+      "roles": [
+        "Developer"
+      ],
+      "entity": "DevelBox",
+      "type": "application"
+    }
+  ],
+  "awards": [
+    {
+      "title": "1st Place Innovation Contest",
+      "date": "2023",
+      "awarder": "CGS Romania",
+      "summary": "Won first place for developing Otis, a JavaScript-based templating software that automated form-filling and email generation"
+    }
+  ],
+  "sections": [
+    "templates",
+    "profile",
+    "work",
+    "skills",
+    "projects",
+    "education",
+    "awards"
+  ]
+}

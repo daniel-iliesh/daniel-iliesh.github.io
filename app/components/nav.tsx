@@ -9,9 +9,8 @@ const navItems: Record<string, {name: string, target?: string, icon?: ReactEleme
   '/blog': {
     name: 'blog',
   },
-  '/resume.pdf': {
+  '/resume': {
     name: 'resume',
-    target: '_blank',
     icon: <IoMdDownload />
   },
 }
