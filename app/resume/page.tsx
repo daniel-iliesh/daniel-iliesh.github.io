@@ -31,7 +31,7 @@ export default function Page() {
         formData.append("json-file", jsonBlob, "resume.json");
 
         const response = await fetch(
-          "https://n8n.rocket-champ.com/webhook/get-resume",
+          "https://n8n.rocket-champ.pw/webhook/get-resume",
           {
             method: "POST",
             body: formData,

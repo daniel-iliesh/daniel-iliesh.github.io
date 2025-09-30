@@ -47,7 +47,7 @@
       "location": "Remote, Germany",
       "description": "Startup developing retargeting platforms",
       "position": "Full-Stack Engineer",
-      "url": "https://rocket-champ.com/",
+      "url": "https://rocket-champ.pw/",
       "startDate": "2025-01",
       "endDate": "2025-06",
       "summary": "Collaborated as a core member of a small development team to build the AdsMedia full-stack retargeting platform using Nuxt.js, Vue.js, and TypeScript.",
@@ -128,6 +128,7 @@
     {
       "name": "IT-Hub - MERN Stack Social Media Web Application",
       "description": "A full-stack social media application built with the MERN stack, demonstrating an understanding of end-to-end web development.",
+      "image": "img/ithub.png",
       "highlights": [
         "Designed and developed IT-Hub with a strong focus on building dynamic frontend features using React.js",
         "Built all UI features using a component-based architecture and effectively managed application state using Redux"

@@ -16,7 +16,7 @@ function ArrowIcon() {
 }
 
 export default async function Footer() {
-  let data = await fetch('https://thebackend.rocket-champ.com/')
+  let data = await fetch('https://thebackend.rocket-champ.pw/')
   const ghProfile = await data.json()
 
   return (
