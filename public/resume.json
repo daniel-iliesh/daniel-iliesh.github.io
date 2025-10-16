@@ -86,6 +86,12 @@
       "endDate": "2023-07"
     }
   ],
+  "certificates": [{
+    "name": "Cybersecurity Essentials",
+    "date": "2022-04",
+    "issuer": "Cisco",
+    "url": "https://www.credly.com/badges/df12a1d2-d3bb-4ea9-ab2f-55d56f94d81c/linked_in_profile"
+  }],
   "skills": [
     {
       "name": "Frontend Development",
