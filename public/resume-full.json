@@ -249,7 +249,8 @@
         "Customer Support Agent"
       ],
       "entity": "CGS Romania",
-      "type": "application"
+      "type": "application",
+      "url": "https://github.com/daniel-iliesh/otis"
     },
     {
       "name": "defender-bot",
@@ -264,7 +265,8 @@
       "roles": [
         "Developer"
       ],
-      "type": "application"
+      "type": "application",
+      "url": "https://github.com/daniel-iliesh/defender-bot"
     },
     {
       "name": "AdCognition",
@@ -280,7 +282,8 @@
         "Developer"
       ],
       "entity": "DevelBox",
-      "type": "application"
+      "type": "application",
+      "url": "https://github.com/develbox-ro/ad-cognition"
     },
     {
       "name": "RoboGPT",
