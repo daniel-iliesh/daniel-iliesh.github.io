@@ -1,0 +1,201 @@
+{
+  "selectedTemplate": 2,
+  "basics": {
+    "name": "Daniel Ilies",
+    "label": "Software Engineer",
+    "email": "iliesh.daniel@gmail.com",
+    "image": "https://2.gravatar.com/avatar/d968116551f1fcd7a8498e06e731087f6847fa163eddd43f1428606fe999b284?size=512&d=initials",
+    "phone": "(+971) 54-753-6361",
+    "url": "https://danielilies.bio",
+    "summary": "Full-Stack Developer with hands-on experience building scalable web applications and AI-driven solutions. Skilled in modern technologies such as Vue.js, Next.js, Node.js, and Go. Recognized for delivering impactful projects, including an award-winning automation tool. I thrive on tackling complex problems and continuously expanding my technical skill set.",
+    "location": {
+      "city": "Dubai",
+      "countryCode": "AE",
+      "address": "Dubai"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "daniel-iliesh",
+        "url": "https://github.com/daniel-iliesh"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "daniel-iliesh",
+        "url": "https://linkedin.com/in/daniel-iliesh"
+      }
+    ],
+    "website": "https://daniel-iliesh.github.io"
+  },
+  "education": [
+    {
+      "institution": "University \"1 Decembrie 1918\" of Alba Iulia",
+      "area": "Informatics",
+      "studyType": "Bachelor's Degree",
+      "startDate": "2019-10",
+      "endDate": "2022-07",
+      "score": "9/10",
+      "courses": [
+        "Building a modern fullstack web application (Thesis)"
+      ],
+      "gpa": "9 out of 10"
+    }
+  ],
+  "work": [
+    {
+      "name": "Trood",
+      "location": "Remote",
+      "position": "Full-Stack Engineering Intern",
+      "startDate": "2025-07",
+      "endDate": "2025-10",
+      "summary": "Contributed to the core platform as a Full-Stack Engineering Intern, leveraging Go, Node.js, and Java to deliver production-ready features.",
+      "highlights": [
+        "Delivered end-to-end production features for the Rizq Launcher MVP by writing backend logic in Go and integrating front-end components using Next.js.",
+        "Engineered resilient systems by developing core services (a gRPC-based text-to-speech module and a Telegram Bot) using Go, Node.js, and Java, and resolved complex multi-codebase authorization issues including two-factor authentication."
+      ]
+    },
+    {
+      "name": "BigFoot Company",
+      "location": "Remote, Germany",
+      "description": "Startup developing retargeting platforms",
+      "position": "Full Stack Engineer",
+      "startDate": "2025-05",
+      "endDate": "2025-08",
+      "summary": "Collaborated as a core member of a small team to build the AdsMriia retargeting platform using Nuxt.js, Vue 3 (Vuetify) with Pinia, and TypeScript.",
+      "highlights": [
+        "Developed the AdsMriia platform’s landing page and core UI components using Nuxt.js and Vue 3 with Vuetify, leveraging Pinia for state management.",
+        "Architected and implemented key dashboard and form features for user and campaign management, ensuring intuitive data visualization and input.",
+        "Ensured responsive design and cross-browser compatibility to deliver a seamless experience across devices.",
+        "Collaborated closely with backend developers on API design and integration to maintain smooth data flow and application functionality."
+      ],
+      "url": "https://rocket-champ.pw/"
+    },
+    {
+      "name": "DevelBox",
+      "location": "Iasi, Romania",
+      "description": "Software development company",
+      "position": "Software Developer",
+      "startDate": "2023-06",
+      "endDate": "2025-05",
+      "summary": "Led frontend development projects and engineered AI-powered solutions while collaborating with cross-functional teams.",
+      "highlights": [
+        "Led a major frontend migration of an exam management platform (examene.umfst.ro/login) from Vue.js 2 to Vuetify, enhancing maintainability and user experience.",
+        "Engineered and deployed \"AdCognition\", an AI-powered browser extension using TypeScript and a custom-trained TensorFlow.js model for real-time ad detection and blocking.",
+        "Developed \"RoboGPT\", a robotics application integrating NVIDIA Isaac Sim and OpenAI APIs to control robots via natural language commands.",
+        "Maintained a local Linux server for training machine learning models, handling environment setup and system monitoring."
+      ]
+    },
+    {
+      "name": "CGS Romania",
+      "location": "Remote, Romania",
+      "description": "Customer service outsourcing company",
+      "position": "Customer Service Representative",
+      "startDate": "2022-03",
+      "endDate": "2023-07",
+      "summary": "Provided customer support while developing innovative automation solutions.",
+      "highlights": [
+        "Won 1st place in a company-wide innovation contest by enhancing Otis, a JavaScript-based automation tool that automated form-filling and email generation, significantly improving team efficiency.",
+        "Honed communication, teamwork, and problem-solving skills while interacting with customers from diverse backgrounds."
+      ]
+    }
+  ],
+  "certificates": [
+    {
+      "name": "Cybersecurity Essentials",
+      "date": "2022-04",
+      "issuer": "Cisco",
+      "url": "https://www.credly.com/badges/df12a1d2-d3bb-4ea9-ab2f-55d56f94d81c/linked_in_profile"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Frontend Development",
+      "level": "Advanced",
+      "keywords": [
+        "JavaScript (ES6+)",
+        "TypeScript",
+        "Vue.js",
+        "React.js",
+        "HTML5",
+        "CSS3",
+        "Tailwind CSS",
+        "Vuetify",
+        "Next.js",
+        "Pinia"
+      ]
+    },
+    {
+      "name": "Backend & AI/ML",
+      "level": "Intermediate",
+      "keywords": [
+        "Node.js",
+        "Python",
+        "Express.js",
+        "MongoDB",
+        "TensorFlow.js",
+        "OpenAI API",
+        "Go"
+      ]
+    },
+    {
+      "name": "Development Tools",
+      "level": "Intermediate",
+      "keywords": [
+        "Git",
+        "Docker",
+        "Linux",
+        "CI/CD"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "AdCognition",
+      "description": "An AI-powered browser extension for real-time ad detection and blocking.",
+      "keywords": [
+        "TypeScript",
+        "TensorFlow.js",
+        "Browser Extension",
+        "AI"
+      ],
+      "roles": [
+        "Developer"
+      ],
+      "entity": "DevelBox",
+      "type": "application"
+    },
+    {
+      "name": "RoboGPT",
+      "description": "An NVIDIA Isaac Sim extension for controlling robots via natural language commands using LLMs and OpenAI APIs.",
+      "keywords": [
+        "NVIDIA Isaac Sim",
+        "LLMs",
+        "OpenAI API",
+        "Natural Language Processing"
+      ],
+      "roles": [
+        "Developer"
+      ],
+      "entity": "DevelBox",
+      "type": "application"
+    }
+  ],
+  "awards": [
+    {
+      "title": "1st Place Innovation Contest",
+      "date": "2023",
+      "awarder": "CGS Romania",
+      "summary": "Won first place for developing Otis, a JavaScript-based templating software that automated form-filling and email generation"
+    }
+  ],
+  "sections": [
+    "templates",
+    "profile",
+    "work",
+    "skills",
+    "projects",
+    "education",
+    "awards"
+  ]
+}
+
