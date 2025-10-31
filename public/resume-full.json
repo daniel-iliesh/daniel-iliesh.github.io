@@ -1,0 +1,339 @@
+{
+  "selectedTemplate": 2,
+  "basics": {
+    "name": "Daniel Ilies",
+    "label": "Software Engineer",
+    "email": "iliesh.daniel@gmail.com",
+    "image": "https://2.gravatar.com/avatar/d968116551f1fcd7a8498e06e731087f6847fa163eddd43f1428606fe999b284?size=512&d=initials",
+    "phone": "(+971) 54-753-6361",
+    "url": "https://danielilies.bio",
+    "summary": "Full-Stack Software Engineer with a Bachelor's in Informatics and proven experience building scalable web applications and AI-driven solutions. Proficient in modern technologies including Vue.js, Next.js, Node.js, and Go, with hands-on experience in AI/ML integration and DevOps practices. Recognized for delivering impactful, award-winning projects through strong problem-solving skills and innovation.",
+    "location": {
+      "city": "Dubai",
+      "countryCode": "AE",
+      "address": "Dubai, UAE"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "daniel-iliesh",
+        "url": "https://github.com/daniel-iliesh"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "daniel-iliesh",
+        "url": "https://linkedin.com/in/daniel-iliesh"
+      }
+    ],
+    "website": "https://daniel-iliesh.github.io"
+  },
+  "education": [
+    {
+      "institution": "University \"1 Decembrie 1918\" of Alba Iulia",
+      "area": "Informatics",
+      "studyType": "Bachelor's Degree",
+      "startDate": "2019-10",
+      "endDate": "2022-07",
+      "score": "9/10",
+      "courses": [
+        "Building a modern fullstack web application (Thesis)"
+      ],
+      "gpa": "9 out of 10"
+    },
+    {
+      "institution": "Universidade da Madeira",
+      "area": "Informatics",
+      "studyType": "Bachelor's Degree",
+      "startDate": "2021-10",
+      "endDate": "2022-02"
+    }
+  ],
+  "work": [
+    {
+      "name": "Trood",
+      "location": "Remote",
+      "position": "Full-Stack Engineering Intern",
+      "startDate": "2025-07",
+      "endDate": "2025-10",
+      "summary": "Contributed to the core platform as a Full-Stack Engineering Intern, leveraging Go, Node.js, and Java to deliver production-ready features.",
+      "highlights": [
+        "Delivered end-to-end production features for the Rizq Launcher MVP by writing backend logic in Go and integrating front-end components using Next.js",
+        "Engineered resilient systems by developing core services (a gRPC-based text-to-speech module and a Telegram Bot) using Go, Node.js, and Java",
+        "Resolved complex multi-codebase authorization issues including two-factor authentication management across independent codebases"
+      ]
+    },
+    {
+      "name": "BigFoot Company",
+      "location": "Remote, Germany",
+      "description": "Startup developing retargeting platforms",
+      "position": "Full Stack Engineer",
+      "startDate": "2025-05",
+      "endDate": "2025-08",
+      "summary": "Collaborated as a core member of a small team to build the AdsMriia retargeting platform using Nuxt.js, Vue 3 (Vuetify) with Pinia, and TypeScript.",
+      "highlights": [
+        "Developed the AdsMriia platform's landing page and core UI components using Nuxt.js and Vue 3 with Vuetify, leveraging Pinia for state management",
+        "Architected and implemented key dashboard and form features for user and campaign management, ensuring intuitive data visualization and input",
+        "Ensured responsive design and cross-browser compatibility to deliver a seamless experience across devices",
+        "Collaborated closely with backend developers on API design and integration to maintain smooth data flow and application functionality"
+      ],
+      "url": "https://rocket-champ.pw/"
+    },
+    {
+      "name": "DevelBox",
+      "location": "Iasi, Romania",
+      "description": "Software development company",
+      "position": "Software Developer",
+      "startDate": "2023-06",
+      "endDate": "2025-05",
+      "summary": "Led frontend development projects and engineered AI-powered solutions while collaborating with cross-functional teams.",
+      "highlights": [
+        "Led a major frontend migration of an exam management platform (examene.umfst.ro/login) from Vue.js 2 to Vuetify, improving user experience and page load times by approximately 25%",
+        "Engineered and deployed \"AdCognition\", an AI-powered browser extension using TypeScript and a custom-trained TensorFlow.js model for real-time ad detection and blocking with over 90% accuracy",
+        "Developed \"RoboGPT\", a robotics application integrating NVIDIA Isaac Sim and OpenAI APIs to control robots via natural language commands, reducing manual simulation inputs by 30%",
+        "Maintained a local Linux server for training machine learning models, handling environment setup and system monitoring",
+        "Actively engaged in code reviews and collaborated with UI/UX designers to translate complex mockups into functional web pages"
+      ]
+    },
+    {
+      "name": "CGS Romania",
+      "location": "Remote, Romania",
+      "description": "Customer service outsourcing company",
+      "position": "Customer Service Representative",
+      "startDate": "2022-03",
+      "endDate": "2023-07",
+      "summary": "Provided customer support while developing innovative automation solutions.",
+      "highlights": [
+        "Won 1st place in a company-wide innovation contest by developing Otis, a JavaScript-based templating software that automated form-filling and email generation, significantly improving team efficiency",
+        "Honed communication, teamwork, and problem-solving skills while interacting with customers from diverse cultures and backgrounds",
+        "Improved English language skills through daily interactions with international customers"
+      ]
+    },
+    {
+      "name": "TraineeLand",
+      "location": "Madrid, Spain",
+      "position": "Frontend Web Developer",
+      "startDate": "2021-07",
+      "endDate": "2021-09",
+      "summary": "Managed and improved WordPress sites using Elementor plugin, focusing on responsive design.",
+      "highlights": [
+        "Managed multiple WordPress sites including dimitrainternational.com, traineeland.com, and eutechengineers.com",
+        "Improved overall design by adding maps, logos and ensuring responsive layouts across all devices",
+        "Enhanced site responsiveness for optimal viewing on mobile and various form-factor devices"
+      ]
+    },
+    {
+      "name": "Equal Web Design",
+      "location": "Alba Iulia, Romania",
+      "position": "Web Developer",
+      "startDate": "2021-06",
+      "endDate": "2021-07",
+      "summary": "Developed interactive web applications and games.",
+      "highlights": [
+        "Developed '21 Game,' an interactive JavaScript-based game that strengthened understanding of DOM manipulation"
+      ]
+    }
+  ],
+  "certificates": [
+    {
+      "name": "Cybersecurity Essentials",
+      "date": "2022-04",
+      "issuer": "Cisco",
+      "url": "https://www.credly.com/badges/df12a1d2-d3bb-4ea9-ab2f-55d56f94d81c/linked_in_profile"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Frontend Development",
+      "level": "Advanced",
+      "keywords": [
+        "JavaScript (ES6+)",
+        "TypeScript",
+        "Vue.js",
+        "React.js",
+        "Next.js",
+        "Nuxt.js",
+        "HTML5",
+        "CSS3",
+        "Tailwind CSS",
+        "Vuetify",
+        "Pinia",
+        "Redux",
+        "Responsive Design"
+      ]
+    },
+    {
+      "name": "Backend Development",
+      "level": "Intermediate",
+      "keywords": [
+        "Node.js",
+        "Go",
+        "Python",
+        "Express.js",
+        "RESTful APIs",
+        "gRPC",
+        "MongoDB",
+        "Java"
+      ]
+    },
+    {
+      "name": "AI/ML & Data Science",
+      "level": "Intermediate",
+      "keywords": [
+        "TensorFlow.js",
+        "Machine Learning",
+        "OpenAI API",
+        "LLMs",
+        "Natural Language Processing",
+        "NVIDIA Isaac Sim",
+        "Jupyter Notebook"
+      ]
+    },
+    {
+      "name": "DevOps & Tools",
+      "level": "Intermediate",
+      "keywords": [
+        "Git",
+        "Docker",
+        "Linux",
+        "CI/CD",
+        "Jenkins",
+        "Nginx",
+        "Docker Compose"
+      ]
+    },
+    {
+      "name": "Development Practices",
+      "level": "Advanced",
+      "keywords": [
+        "Agile/Scrum",
+        "Code Reviews",
+        "OOP",
+        "SOLID Principles",
+        "Performance Optimization",
+        "Cross-Browser Compatibility"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "IT-Hub - MERN Stack Social Media Web Application",
+      "description": "A full-stack social media application built with the MERN stack, demonstrating an understanding of end-to-end web development.",
+      "highlights": [
+        "Designed and developed IT-Hub with a strong focus on building dynamic frontend features using React.js",
+        "Built all UI features using a component-based architecture and effectively managed application state using Redux"
+      ],
+      "keywords": [
+        "React.js",
+        "MongoDB",
+        "Express.js",
+        "Node.js",
+        "Redux",
+        "Component-Based Architecture"
+      ],
+      "url": "https://github.com/daniel-iliesh/ithub",
+      "roles": [
+        "Full-Stack Developer"
+      ],
+      "type": "application"
+    },
+    {
+      "name": "Otis – Customer Support Automation Tool",
+      "description": "An internal tool that won a company innovation award, using JavaScript, jQuery, and RegEx to automate form-filling and email generation for customer support.",
+      "keywords": [
+        "JavaScript",
+        "jQuery",
+        "RegEx",
+        "Automation"
+      ],
+      "roles": [
+        "Customer Support Agent"
+      ],
+      "entity": "CGS Romania",
+      "type": "application"
+    },
+    {
+      "name": "defender-bot",
+      "description": "A Python-controlled LEGO Mindstorms Micropython robot from university, demonstrating experience with robotics, sensors, and OOP principles.",
+      "keywords": [
+        "Python",
+        "LEGO Mindstorms",
+        "Micropython",
+        "Robotics",
+        "OOP"
+      ],
+      "roles": [
+        "Developer"
+      ],
+      "type": "application"
+    },
+    {
+      "name": "AdCognition",
+      "description": "An AI-powered browser extension for real-time ad detection and blocking with over 90% accuracy.",
+      "keywords": [
+        "TypeScript",
+        "TensorFlow.js",
+        "Browser Extension",
+        "AI",
+        "Machine Learning"
+      ],
+      "roles": [
+        "Developer"
+      ],
+      "entity": "DevelBox",
+      "type": "application"
+    },
+    {
+      "name": "RoboGPT",
+      "description": "An NVIDIA Isaac Sim extension for controlling robots via natural language commands using LLMs and OpenAI APIs, reducing manual simulation inputs by 30%.",
+      "keywords": [
+        "NVIDIA Isaac Sim",
+        "LLMs",
+        "OpenAI API",
+        "Natural Language Processing",
+        "Robotics"
+      ],
+      "roles": [
+        "Developer"
+      ],
+      "entity": "DevelBox",
+      "type": "application"
+    }
+  ],
+  "awards": [
+    {
+      "title": "1st Place Innovation Contest",
+      "date": "2023",
+      "awarder": "CGS Romania",
+      "summary": "Won first place for developing Otis, a JavaScript-based templating software that automated form-filling and email generation, significantly improving team efficiency"
+    }
+  ],
+  "languages": [
+    {
+      "language": "Romanian",
+      "fluency": "Native"
+    },
+    {
+      "language": "Russian",
+      "fluency": "Native"
+    },
+    {
+      "language": "English",
+      "fluency": "Full Professional"
+    },
+    {
+      "language": "German",
+      "fluency": "Elementary"
+    }
+  ],
+  "sections": [
+    "templates",
+    "profile",
+    "work",
+    "skills",
+    "projects",
+    "education",
+    "awards",
+    "certificates",
+    "languages"
+  ]
+}

@@ -162,7 +162,8 @@
         "Developer"
       ],
       "entity": "DevelBox",
-      "type": "application"
+      "type": "application",
+      "url": "https://github.com/develbox-ro/ad-cognition"
     },
     {
       "name": "RoboGPT",
