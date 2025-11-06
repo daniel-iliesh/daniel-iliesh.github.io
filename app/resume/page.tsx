@@ -1,5 +1,11 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
+import {
+  RESUME_BACKEND_BASE_URL,
+  RESUME_BACKEND_RESUME_URL,
+  RESUME_BACKEND_THEMES_URL,
+  RESUME_GIST_URL,
+} from "src/features/resume/constants";
 
 interface ResumeLinks {
   viewUrl: string;
@@ -21,8 +27,9 @@ export default function Page() {
     const fetchThemes = async () => {
       try {
         setThemesStatus("loading");
-        const response = await fetch("/api/resume/themes", {
+        const response = await fetch(RESUME_BACKEND_THEMES_URL, {
           cache: "no-store",
+          mode: "cors",
         });
 
         if (!response.ok) {
@@ -60,8 +67,30 @@ export default function Page() {
     setError(null);
 
     try {
-      const response = await fetch(`/api/resume?theme=${encodeURIComponent(selectedTheme)}`, {
+      const resumeResponse = await fetch(RESUME_GIST_URL, {
         cache: "no-store",
+        mode: "cors",
+      });
+
+      if (!resumeResponse.ok) {
+        throw new Error(
+          `Failed to fetch resume data (status ${resumeResponse.status}).`
+        );
+      }
+
+      const resumeJson = await resumeResponse.json();
+
+      const backendUrl = `${RESUME_BACKEND_RESUME_URL}?theme=${encodeURIComponent(
+        selectedTheme
+      )}`;
+
+      const response = await fetch(backendUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(resumeJson),
+        mode: "cors",
       });
 
       if (!response.ok) {
@@ -77,7 +106,6 @@ export default function Page() {
         throw new Error("Resume service returned an unexpected response.");
       }
 
-      const backendBase = "https://thebackend.rocket-champ.pw";
       const viewUrl = "viewUrl" in resumeEntry ? resumeEntry.viewUrl : null;
       const pdfUrl = "pdfUrl" in resumeEntry ? resumeEntry.pdfUrl : null;
 
@@ -86,8 +114,8 @@ export default function Page() {
       }
 
       setResumeLinks({
-        viewUrl: new URL(viewUrl, backendBase).toString(),
-        pdfUrl: new URL(pdfUrl, backendBase).toString(),
+        viewUrl: new URL(viewUrl, RESUME_BACKEND_BASE_URL).toString(),
+        pdfUrl: new URL(pdfUrl, RESUME_BACKEND_BASE_URL).toString(),
       });
 
       setStatus("success");
