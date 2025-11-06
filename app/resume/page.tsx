@@ -1,101 +1,83 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
-import { RESUME_GIST_URL } from "src/features/resume/constants";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export default function Page() {
   const [status, setStatus] = useState<"loading" | "success" | "error">(
     "loading"
   );
   const [error, setError] = useState<string | null>(null);
+  const [resumeLinks, setResumeLinks] = useState<
+    { viewUrl: string; pdfUrl: string } | null
+  >(null);
   const hasGeneratedRef = useRef(false);
 
-  useEffect(() => {
-    // Prevent multiple PDF generations
+  const generateResume = useCallback(async () => {
     if (hasGeneratedRef.current) {
       return;
     }
 
-    const generatePDF = async () => {
-      try {
-        hasGeneratedRef.current = true;
-        setStatus("loading");
+    hasGeneratedRef.current = true;
+    setStatus("loading");
+    setError(null);
 
-        const resumeResponse = await fetch(RESUME_GIST_URL, {
-          headers: {
-            Accept: "application/json",
-          },
-          cache: "no-store",
-        });
+    try {
+      const response = await fetch("/api/resume", {
+        cache: "no-store",
+      });
 
-        if (!resumeResponse.ok) {
-          throw new Error(
-            `Failed to fetch resume data (status ${resumeResponse.status})`
-          );
-        }
-
-        const resumeJson = await resumeResponse.json();
-
-        // Create FormData
-        const formData = new FormData();
-
-        // Convert JSON to Blob and append as file
-        const jsonBlob = new Blob([JSON.stringify(resumeJson)], {
-          type: "application/json",
-        });
-
-        formData.append("json-file", jsonBlob, "resume.json");
-
-        const response = await fetch(
-          "https://thebackend.rocket-champ.pw/resume",
-          {
-            method: "POST",
-            body: formData,
-            mode: "cors", // Explicitly set CORS mode
-            credentials: "omit", // Don't send credentials
-          }
+      if (!response.ok) {
+        throw new Error(
+          `Failed to generate resume (status ${response.status})`
         );
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const blob = await response.blob();
-        const url = URL.createObjectURL(blob);
-
-        // Open in new tab
-        window.open(url, "_blank");
-
-        setStatus("success");
-
-        // Clean up after delay
-        setTimeout(() => URL.revokeObjectURL(url), 1000);
-      } catch (err) {
-        let errorMessage = "Unknown error";
-        
-        if (err instanceof Error) {
-          if (err.name === "TypeError" && err.message.includes("fetch")) {
-            errorMessage = "Network error: Unable to connect to PDF service. Please check your internet connection.";
-          } else if (err.message.includes("CORS")) {
-            errorMessage = "CORS error: The PDF service doesn't allow requests from this domain.";
-          } else {
-            errorMessage = err.message;
-          }
-        }
-        
-        setError(errorMessage);
-        setStatus("error");
-        // Reset the ref on error so user can retry
-        hasGeneratedRef.current = false;
       }
-    };
 
-    generatePDF();
+      const data = await response.json();
+      const resumeEntry = Array.isArray(data) ? data[0] : data;
+
+      if (!resumeEntry || typeof resumeEntry !== "object") {
+        throw new Error("Resume service returned an unexpected response.");
+      }
+
+      const backendBase = "https://thebackend.rocket-champ.pw";
+      const viewUrl = "viewUrl" in resumeEntry ? resumeEntry.viewUrl : null;
+      const pdfUrl = "pdfUrl" in resumeEntry ? resumeEntry.pdfUrl : null;
+
+      if (!viewUrl || !pdfUrl) {
+        throw new Error("Resume service response is missing required URLs.");
+      }
+
+      setResumeLinks({
+        viewUrl: new URL(viewUrl, backendBase).toString(),
+        pdfUrl: new URL(pdfUrl, backendBase).toString(),
+      });
+
+      setStatus("success");
+    } catch (err) {
+      let errorMessage = "Unknown error";
+
+      if (err instanceof Error) {
+        if (err.name === "TypeError" && err.message.includes("fetch")) {
+          errorMessage =
+            "Network error: Unable to connect to resume service. Please check your internet connection.";
+        } else {
+          errorMessage = err.message;
+        }
+      }
+
+      setError(errorMessage);
+      setStatus("error");
+      hasGeneratedRef.current = false;
+    }
   }, []);
+
+  useEffect(() => {
+    generateResume();
+  }, [generateResume]);
 
   if (status === "loading") {
     return (
-      <div> 
-        Generating PDF...
+      <div>
+        Generating resume links...
       </div>
     );
   }
@@ -110,25 +92,46 @@ export default function Page() {
               hasGeneratedRef.current = false;
               setError(null);
               setStatus("loading");
-              // Trigger the effect again by updating a dependency
-              window.location.reload();
+              generateResume();
             }}
             className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
           >
-            Retry API
+            Retry
           </button>
-          {/* <button
-            onClick={() => {
-              window.open("/resume.pdf", "_blank");
-            }}
-            className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-          >
-            Download Static PDF
-          </button> */}
         </div>
       </div>
     );
   }
 
-  return <div className="text-green-500">PDF opened in new tab!</div>;
+  if (!resumeLinks) {
+    return (
+      <div className="text-yellow-500">
+        Resume generated but no links were provided. Please try again later.
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      <p className="text-green-500">Resume is ready. Choose a format:</p>
+      <div className="flex flex-wrap gap-3">
+        <button
+          onClick={() => {
+            window.open(resumeLinks.viewUrl, "_blank", "noopener,noreferrer");
+          }}
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          View HTML Version
+        </button>
+        <button
+          onClick={() => {
+            window.open(resumeLinks.pdfUrl, "_blank", "noopener,noreferrer");
+          }}
+          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+        >
+          Download PDF Version
+        </button>
+      </div>
+    </div>
+  );
 }
