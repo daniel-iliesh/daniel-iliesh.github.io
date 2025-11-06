@@ -1,9 +1,10 @@
-import jsonResume from '../../public/resume-full.json'
+import { fetchResume } from 'src/features/resume/api'
 import type { Project } from 'src/features/resume/types'
 
-const resumeProjects = (jsonResume.projects ?? []) as Project[]
+export async function Projects() {
+  const resume = await fetchResume()
+  const resumeProjects = (resume.projects ?? []) as Project[]
 
-export function Projects() {
   if (!resumeProjects.length) {
     return (
       <p className="text-neutral-600 dark:text-neutral-400">

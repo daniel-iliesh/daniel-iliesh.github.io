@@ -2,9 +2,25 @@ import { BlogPosts } from "app/components/posts";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import Link from "next/link";
 import { SpeakNameButton } from "app/components/speakNameButton";
-import jsonResume from "../public/resume.json";
+import { fetchResume } from "src/features/resume/api";
 
 export default async function Page() {
+  const resume = await fetchResume();
+  const basics = resume.basics;
+
+  if (!basics) {
+    return (
+      <section>
+        <p className="text-sm text-gray-300">
+          Resume data is unavailable right now. Please try again later.
+        </p>
+      </section>
+    );
+  }
+
+  const profiles = basics.profiles ?? [];
+  const githubProfile = profiles.find((profile) => profile.network === "GitHub");
+  const linkedinProfile = profiles.find((profile) => profile.network === "LinkedIn");
 
   return (
     <section>
@@ -12,10 +28,10 @@ export default async function Page() {
         <div className="flex items-center gap-4 w-full">
           <Link
             target="_blank"
-            href={jsonResume.basics.url}
+            href={basics.url ?? "#"}
           >
             <img
-              src={jsonResume.basics.image}
+              src={basics.image ?? ""}
               alt="Gravatar Profile"
               width={100}
               height={100}
@@ -26,20 +42,16 @@ export default async function Page() {
             <div className="flex justify-between w-full">
               <div className="flex flex-col">
                 <h1 className="text-2xl font-semibold tracking-tighter flex gap-1 items-center">
-                  {jsonResume.basics.name}
+                  {basics.name}
                   <SpeakNameButton
-                    name={jsonResume.basics.name}
+                    name={basics.name ?? ""}
                   />
                 </h1>
-                <h2>{jsonResume.basics.label}</h2>
+                <h2>{basics.label}</h2>
               </div>
               <div className="flex gap-4 items-center">
                 <a
-                  href={
-                    jsonResume.basics.profiles.find(
-                      (a) => a.network == "GitHub"
-                    )?.url
-                  }
+                  href={githubProfile?.url}
                   target="_blank"
                 >
                   <FaGithub
@@ -49,11 +61,7 @@ export default async function Page() {
                   />
                 </a>
                 <a
-                  href={
-                    jsonResume.basics.profiles.find(
-                      (a) => a.network == "LinkedIn"
-                    )?.url
-                  }
+                  href={linkedinProfile?.url}
                   target="_blank"
                 >
                   <FaLinkedin
@@ -65,14 +73,14 @@ export default async function Page() {
               </div>
             </div>
             <p className="text-sm text-gray-300 mt-2">
-              {jsonResume.basics.location.city}
+              {basics.location?.city}
             </p>
             <p className="text-sm text-gray-300 flex gap-1">
-              <a href={`mailto:${jsonResume.basics.email}`}>
-                {jsonResume.basics.email}
+              <a href={basics.email ? `mailto:${basics.email}` : undefined}>
+                {basics.email}
               </a>
-              <a href={`tel:${jsonResume.basics.phone}`}>
-                {jsonResume.basics.phone}
+              <a href={basics.phone ? `tel:${basics.phone}` : undefined}>
+                {basics.phone}
               </a>
             </p>
           </div>
@@ -81,7 +89,7 @@ export default async function Page() {
       <div className="mb-4">
         <div className="text-xl text-green-400 font-bold">About me</div>
         {/* <ReadmeContent htmlContent={jsonResume.basics?.summary} /> */}
-        {jsonResume.basics.summary}
+        {basics.summary}
       </div>
       <div className="my-8">
         <BlogPosts />

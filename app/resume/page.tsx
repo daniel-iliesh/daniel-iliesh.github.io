@@ -1,6 +1,6 @@
 "use client";
-import jsonResume from "../../public/resume.json";
 import { useEffect, useState, useRef } from "react";
+import { RESUME_GIST_URL } from "src/features/resume/constants";
 
 export default function Page() {
   const [status, setStatus] = useState<"loading" | "success" | "error">(
@@ -20,18 +20,33 @@ export default function Page() {
         hasGeneratedRef.current = true;
         setStatus("loading");
 
+        const resumeResponse = await fetch(RESUME_GIST_URL, {
+          headers: {
+            Accept: "application/json",
+          },
+          cache: "no-store",
+        });
+
+        if (!resumeResponse.ok) {
+          throw new Error(
+            `Failed to fetch resume data (status ${resumeResponse.status})`
+          );
+        }
+
+        const resumeJson = await resumeResponse.json();
+
         // Create FormData
         const formData = new FormData();
 
         // Convert JSON to Blob and append as file
-        const jsonBlob = new Blob([JSON.stringify(jsonResume)], {
+        const jsonBlob = new Blob([JSON.stringify(resumeJson)], {
           type: "application/json",
         });
 
         formData.append("json-file", jsonBlob, "resume.json");
 
         const response = await fetch(
-          "https://n8n.rocket-champ.pw/webhook/get-resume",
+          "https://thebackend.rocket-champ.pw/resume",
           {
             method: "POST",
             body: formData,
@@ -102,14 +117,14 @@ export default function Page() {
           >
             Retry API
           </button>
-          <button
+          {/* <button
             onClick={() => {
               window.open("/resume.pdf", "_blank");
             }}
             className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
           >
             Download Static PDF
-          </button>
+          </button> */}
         </div>
       </div>
     );
