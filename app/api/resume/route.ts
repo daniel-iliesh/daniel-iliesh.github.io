@@ -1,10 +1,17 @@
 import { NextResponse } from "next/server";
-import { RESUME_GIST_URL } from "src/features/resume/constants";
+import {
+  RESUME_BACKEND_RESUME_URL,
+  RESUME_GIST_URL,
+} from "src/features/resume/constants";
 
-const BACKEND_RESUME_URL = "https://thebackend.rocket-champ.pw/resume";
-
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const themeParam = searchParams.get("theme")?.trim() ?? "";
+    const backendUrl = themeParam
+      ? `${RESUME_BACKEND_RESUME_URL}?theme=${encodeURIComponent(themeParam)}`
+      : RESUME_BACKEND_RESUME_URL;
+
     const resumeResponse = await fetch(RESUME_GIST_URL, {
       headers: {
         Accept: "application/json",
@@ -23,7 +30,7 @@ export async function GET() {
 
     const resumeJson = await resumeResponse.json();
 
-    const backendResponse = await fetch(BACKEND_RESUME_URL, {
+    const backendResponse = await fetch(backendUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
