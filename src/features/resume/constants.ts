@@ -9,3 +9,6 @@ export const RESUME_BACKEND_RESUME_URL =
 
 export const RESUME_BACKEND_THEMES_URL =
   `${RESUME_BACKEND_BASE_URL}/resume/themes` as const;
+
+export const RESUME_TAILORING_URL =
+  "https://n8n.rocket-champ.pw/webhook/resume/tailor" as const;
