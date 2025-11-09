@@ -1,5 +1,11 @@
 "use client";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import CodeMirror from "@uiw/react-codemirror";
+import { json as jsonLanguage } from "@codemirror/lang-json";
+import { lintGutter, linter, Diagnostic } from "@codemirror/lint";
+import { type Extension } from "@codemirror/state";
+import { type EditorView } from "@codemirror/view";
+import parseJsonToAst, { type ASTNode, type ObjectNode, type ArrayNode } from "json-to-ast";
 import {
   RESUME_BACKEND_BASE_URL,
   RESUME_BACKEND_RESUME_URL,
@@ -95,6 +101,94 @@ export default function Page() {
   }, []);
 
   const validator = useMemo(() => new Validator(), []);
+
+  const lintExtension = useMemo<Extension>(
+    () =>
+      linter((view) => {
+        const diagnostics: Diagnostic[] = [];
+        const text = view.state.doc.toString();
+
+        if (text.trim().length === 0) {
+          return diagnostics;
+        }
+
+        let ast: ASTNode | null = null;
+
+        try {
+          ast = parseJsonToAst(text, { loc: true });
+        } catch (error) {
+          const message = error instanceof Error ? error.message : "Unable to parse résumé JSON.";
+          const range = getErrorRange(view, error);
+
+          if (range) {
+            const from = range.from;
+            const to = range.to;
+            const shortMessage = formatLintMessage(message, "Unable to parse résumé JSON.");
+
+            diagnostics.push({
+              from,
+              to: Math.max(from + 1, to),
+              severity: "error",
+              message: shortMessage,
+            });
+            return diagnostics;
+          }
+
+          diagnostics.push({
+            from: 0,
+            to: view.state.doc.length,
+            severity: "error",
+            message: formatLintMessage(message, "Unable to parse résumé JSON."),
+          });
+          return diagnostics;
+        }
+
+        if (!ast) {
+          return diagnostics;
+        }
+
+        validationErrors.forEach((validationError) => {
+          const targetNode = findAstNodeForError(ast as ObjectNode | ArrayNode, validationError.property);
+
+          if (targetNode?.loc) {
+            const { start, end } = targetNode.loc;
+            const from = positionFromLoc(view, start.line, start.column);
+            const to = positionFromLoc(view, end.line, end.column);
+            const shortMessage = formatLintMessage(
+              validationError.message,
+              validationError.stack ?? "Schema validation issue"
+            );
+
+            diagnostics.push({
+              from,
+              to: Math.max(from + 1, to),
+              severity: "error",
+              message: shortMessage,
+            });
+          } else {
+            const shortMessage = formatLintMessage(
+              validationError.message,
+              validationError.stack ?? "Schema validation issue"
+            );
+
+            diagnostics.push({
+              from: 0,
+              to: view.state.doc.length,
+              severity: "error",
+              message: shortMessage,
+            });
+          }
+        });
+
+        return diagnostics;
+      }),
+    [validationErrors]
+  );
+
+  const editorExtensions = useMemo<Extension[]>(
+    () => [jsonLanguage(), lintGutter(), lintExtension],
+    [lintExtension]
+  );
 
   const fetchGeneralResume = useCallback(async () => {
     setFetchStatus("loading");
@@ -322,6 +416,188 @@ export default function Page() {
     (tailorMode === "linkedin" && linkedinUrl.trim().length > 0) ||
     (tailorMode === "description" && jobDescription.trim().length > 0);
 
+  function formatLintMessage(message: string | undefined, fallback: string): string {
+    if (!message) {
+      return fallback;
+    }
+
+    const firstLine = message.split("\n")[0]?.trim();
+    return firstLine && firstLine.length > 0 ? firstLine : fallback;
+  }
+
+  function positionFromLoc(view: EditorView, line: number, column: number) {
+    const clampedLine = Math.max(1, Math.min(line, view.state.doc.lines));
+    const lineInfo = view.state.doc.line(clampedLine);
+    const offset = Math.max(0, column - 1);
+    return Math.min(lineInfo.to, lineInfo.from + offset);
+  }
+
+  function findAstNodeForError(ast: ObjectNode | ArrayNode, propertyPath: string | undefined): ASTNode | null {
+    if (!propertyPath) {
+      return ast;
+    }
+
+    const segments = extractPathSegments(propertyPath);
+    if (segments.length === 0) {
+      return ast;
+    }
+
+    let current: ASTNode | null = ast;
+    let lastLocated: ASTNode | null = ast.loc ? ast : null;
+
+    for (const segment of segments) {
+      if (!current) {
+        break;
+      }
+
+      const next = typeof segment === "string" ? findObjectChild(current, segment) : findArrayChild(current, segment);
+
+      if (!next) {
+        break;
+      }
+
+      if (next.loc) {
+        lastLocated = next;
+      }
+
+      current = next;
+    }
+
+    if (current && current.loc) {
+      return current;
+    }
+
+    return lastLocated ?? ast;
+  }
+
+  function findObjectChild(node: ASTNode, key: string): ASTNode | null {
+    if (node.type !== "Object") {
+      return null;
+    }
+
+    const property = node.children.find((child) => child.key.value === key);
+    return property?.value ?? null;
+  }
+
+  function findArrayChild(node: ASTNode, index: number): ASTNode | null {
+    if (node.type !== "Array") {
+      return null;
+    }
+
+    return node.children[index] ?? null;
+  }
+
+  function extractPathSegments(propertyPath: string): (string | number)[] {
+    const cleaned = propertyPath.replace(/^instance\.?/, "");
+    if (!cleaned) {
+      return [];
+    }
+
+    const segments: (string | number)[] = [];
+    const parts = cleaned.split(".");
+
+    parts.forEach((part) => {
+      const tokens = part.match(/([^\[]+)|(\[(\d+)\])/g);
+      if (!tokens) {
+        return;
+      }
+
+      tokens.forEach((token) => {
+        if (token.startsWith("[")) {
+          const index = Number(token.slice(1, -1));
+          if (!Number.isNaN(index)) {
+            segments.push(index);
+          }
+        } else {
+          segments.push(token);
+        }
+      });
+    });
+
+    return segments;
+  }
+
+  function getErrorRange(view: EditorView, error: unknown): { from: number; to: number } | null {
+    if (!error || typeof error !== "object") {
+      return null;
+    }
+
+    const locRange = (() => {
+      if (!("loc" in error)) {
+        return null;
+      }
+
+      const rawLoc = (error as { loc?: unknown }).loc;
+
+      if (!rawLoc || typeof rawLoc !== "object") {
+        return null;
+      }
+
+      if ("start" in rawLoc && rawLoc.start && typeof rawLoc.start === "object") {
+        const start = normalizePosition(rawLoc.start);
+        const end = normalizePosition((rawLoc as { end?: unknown }).end ?? rawLoc.start);
+        return start && end ? { start, end } : null;
+      }
+
+      if ("line" in rawLoc && "column" in rawLoc) {
+        const start = normalizePosition(rawLoc);
+        return start ? { start, end: start } : null;
+      }
+
+      return null;
+    })();
+
+    if (locRange) {
+      const from = positionFromLoc(view, locRange.start.line, locRange.start.column);
+      const to = positionFromLoc(view, locRange.end.line, locRange.end.column);
+      return { from, to };
+    }
+
+    const directLine = (error as { line?: number }).line;
+    const directColumn = (error as { column?: number }).column;
+
+    if (typeof directLine === "number" && typeof directColumn === "number") {
+      const from = positionFromLoc(view, directLine, directColumn);
+      return { from, to: Math.max(from + 1, from) };
+    }
+
+    if ("pos" in error && typeof (error as { pos?: number }).pos === "number") {
+      const position = Math.max(0, (error as { pos: number }).pos);
+      const lineInfo = view.state.doc.lineAt(position);
+      return { from: position, to: Math.min(lineInfo.to, position + 1) };
+    }
+
+    if (error instanceof Error && typeof error.message === "string") {
+      const match = error.message.match(/at\s+(\d+):(\d+)/);
+      if (match) {
+        const [, lineStr, columnStr] = match;
+        const line = Number(lineStr);
+        const column = Number(columnStr);
+        if (!Number.isNaN(line) && !Number.isNaN(column)) {
+          const from = positionFromLoc(view, line, column);
+          return { from, to: Math.max(from + 1, from) };
+        }
+      }
+    }
+
+    return null;
+  }
+
+  function normalizePosition(position: unknown): { line: number; column: number } | null {
+    if (!position || typeof position !== "object") {
+      return null;
+    }
+
+    const line = (position as { line?: number }).line;
+    const column = (position as { column?: number }).column;
+
+    if (typeof line !== "number" || typeof column !== "number") {
+      return null;
+    }
+
+    return { line, column };
+  }
+
   return (
     <div className="space-y-8">
       <header className="space-y-3">
@@ -530,18 +806,45 @@ export default function Page() {
                   Reset edits
                 </button>
               )}
+              {fetchStatus === "success" && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    try {
+                      const parsed = JSON.parse(editedResumeJson);
+                      setEditedResumeJson(JSON.stringify(parsed, null, 2));
+                      setJsonEditingError(null);
+                      setValidationErrors([]);
+                    } catch (err) {
+                      if (err instanceof SyntaxError) {
+                        setJsonEditingError(`Invalid JSON: ${err.message}`);
+                      }
+                    }
+                  }}
+                  className="text-xs font-semibold text-green-400 transition hover:text-green-300"
+                >
+                  Auto-format
+                </button>
+              )}
             </div>
 
-            <textarea
-              value={editedResumeJson}
-              onChange={(event) => {
-                setEditedResumeJson(event.target.value);
-              }}
-              rows={18}
-              className="w-full min-h-[260px] rounded-md border border-neutral-700 bg-neutral-950 px-3 py-2 font-mono text-xs text-green-100 focus:outline-none focus:ring-2 focus:ring-green-500"
-              disabled={isFetchingResume || fetchStatus === "idle"}
-              placeholder="Load a résumé JSON above to edit it here."
-            />
+            <div className="rounded-md border border-neutral-700">
+              <CodeMirror
+                value={editedResumeJson}
+                height="300px"
+                extensions={editorExtensions}
+                basicSetup={{
+                  lineNumbers: true,
+                  highlightActiveLine: false,
+                  foldGutter: true,
+                }}
+                readOnly={isFetchingResume || fetchStatus === "idle"}
+                onChange={(value) => {
+                  setEditedResumeJson(value);
+                }}
+                theme="dark"
+              />
+            </div>
           </div>
         )}
 
