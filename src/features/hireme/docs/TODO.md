@@ -80,13 +80,14 @@ Create reusable components under `src/features/hireme/components`:
 ## 6. Email / Backend Integration
 - [ ] Decide on submission strategy:
   - [ ] Next.js route handler under `app/api/hire-quote/route.ts`, or
-  - [ ] External email service (e.g. EmailJS, existing backend if any).
-- [ ] Define `QuotePayload` DTO matching the state shape.
-- [ ] Implement API route that:
-  - [ ] Receives JSON payload.
-  - [ ] Constructs email to YOU using conditional templates (budget mismatch vs aligned).
-  - [ ] Triggers confirmation email to client (simple version first).
-- [ ] Wire `submitQuote` in the client to POST to this API and handle loading/success/error states.
+  - [x] External backend endpoint (`https://thebackend.rocket-champ.pw/mail`).
+- [x] Define `QuotePayload` DTO matching the state shape.
+- [x] Implement backend `/mail` route that:
+  - [x] Receives JSON payload.
+  - [x] Validates `hire-quote` DTO (types, required fields, agreeToTerms, price > 0).
+  - [x] Constructs email to YOU using conditional templates (budget mismatch vs aligned).
+  - [x] Triggers confirmation email to client with styling consistent with the site.
+- [x] Wire `submitQuote` in the client to POST to this backend and handle loading/success/error states.
 - [ ] Add basic server-side validation and spam protection (honeypot field or rate limiting, if needed).
 
 ## 7. Styling & Responsiveness

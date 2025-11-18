@@ -36,6 +36,7 @@ export default function HireMePage() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   const suggestedBudgetRange = budgetRanges.find((range) => {
     const max = range.max ?? Number.POSITIVE_INFINITY;
@@ -50,14 +51,28 @@ export default function HireMePage() {
     try {
       setIsSubmitting(true);
       setSubmitError(null);
+      setSubmitSuccess(false);
 
       const payload = buildPayload();
-      // TODO: Wire this payload to a backend/email route.
-      // For now, we just log it so we can inspect the shape during development.
-      console.log("Hire Me quote payload", payload);
+      const response = await fetch("https://thebackend.rocket-champ.pw/mail", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          type: "hire-quote",
+          quote: payload,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit quote");
+      }
+
+      setSubmitSuccess(true);
     } catch {
       setSubmitError(
-        "Something went wrong while preparing your quote. Please try again in a moment."
+        "Something went wrong while sending your request. Please try again in a moment."
       );
     } finally {
       setIsSubmitting(false);
@@ -150,13 +165,21 @@ export default function HireMePage() {
         )}
 
         {state.currentStep === 6 && (
-          <ContactStep
-            contact={state.contact}
-            isSubmitting={isSubmitting}
-            error={submitError}
-            onChangeField={updateContactField}
-            onSubmit={handleSubmit}
-          />
+          <div className="space-y-3">
+            {submitSuccess && (
+              <p className="rounded-md border border-green-500/60 bg-green-500/10 p-3 text-xs text-green-300">
+                Thanks for your request. I&apos;ll review your answers and get back to you with a
+                refined proposal.
+              </p>
+            )}
+            <ContactStep
+              contact={state.contact}
+              isSubmitting={isSubmitting}
+              error={submitError}
+              onChangeField={updateContactField}
+              onSubmit={handleSubmit}
+            />
+          </div>
         )}
       </div>
     </QuoteStepper>
