@@ -85,6 +85,7 @@ export function TimelineStep({
                   ? "border-green-500 bg-green-500/10 text-neutral-100"
                   : "border-neutral-800 bg-neutral-950/40 text-neutral-200 hover:border-neutral-700"
               }`}
+              aria-pressed={isActive}
             >
               <span className="font-semibold">{option.label}</span>
               <span className="mt-1 text-xs text-neutral-400">{option.description}</span>

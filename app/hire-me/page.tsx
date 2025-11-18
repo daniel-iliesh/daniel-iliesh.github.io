@@ -10,6 +10,7 @@ import { TimelineStep } from "src/features/hireme/components/TimelineStep";
 import { BudgetStep } from "src/features/hireme/components/BudgetStep";
 import { ContactStep } from "src/features/hireme/components/ContactStep";
 import { PriceSummary } from "src/features/hireme/components/PriceSummary";
+import { SelectionsSummary } from "src/features/hireme/components/SelectionsSummary";
 
 export default function HireMePage() {
   const {
@@ -29,6 +30,7 @@ export default function HireMePage() {
     buildPayload,
     nextStep,
     prevStep,
+    goToStep,
   } = useQuoteBuilder();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -38,6 +40,10 @@ export default function HireMePage() {
     const max = range.max ?? Number.POSITIVE_INFINITY;
     return roundedFinalPrice >= range.min && roundedFinalPrice <= max;
   }) ?? null;
+
+  const projectTypeLabel = state.projectType
+    ? projectTypes.find((type) => type.id === state.projectType)?.label ?? null
+    : null;
 
   async function handleSubmit() {
     try {
@@ -64,6 +70,7 @@ export default function HireMePage() {
       estimatedTotal={roundedFinalPrice}
       onNext={nextStep}
       onPrev={prevStep}
+      onStepChange={goToStep}
       canGoNext={
         state.currentStep === 6
           ? false
@@ -83,6 +90,15 @@ export default function HireMePage() {
           roundedFinalPrice={roundedFinalPrice}
           budgetRange={state.budgetRange}
           budgetMismatch={state.budgetMismatch}
+        />
+
+        <SelectionsSummary
+          projectType={state.projectType}
+          projectTypeLabel={projectTypeLabel}
+          selectedFeatures={state.selectedFeatures}
+          complexity={state.complexity}
+          timeline={state.timeline}
+          budgetRange={state.budgetRange}
         />
 
         {state.currentStep === 1 && (

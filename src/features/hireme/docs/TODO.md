@@ -37,7 +37,7 @@ Create reusable components under `src/features/hireme/components`:
 
 - [x] **Step navigation / layout**
   - [x] `QuoteStepper` shell that renders the current step and controls navigation.
-  - [x] Progress indicator ("Step X of 6").
+  - [x] Progress indicator ("Step X of 6") with clickable step numbers (back/visited steps).
   - [x] Live price summary panel (non-sticky version).
 
 - [x] **Step 1 – Project Type**

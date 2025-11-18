@@ -47,6 +47,7 @@ export function BudgetStep({
                   ? "border-green-500 bg-green-500/10 text-neutral-100"
                   : "border-neutral-800 bg-neutral-950/40 text-neutral-200 hover:border-neutral-700"
               }`}
+              aria-pressed={isActive}
             >
               <span className="font-semibold flex items-center gap-1">
                 {range.label}
@@ -72,6 +73,7 @@ export function BudgetStep({
           className={`flex flex-col items-start rounded-lg border px-4 py-3 text-left text-sm transition focus:outline-none focus:ring-2 focus:ring-green-500 ${
             !selectedRange ? "border-green-500 bg-green-500/10 text-neutral-100" : "border-neutral-800 bg-neutral-950/40 text-neutral-200 hover:border-neutral-700"
           }`}
+          aria-pressed={!selectedRange}
         >
           <span className="font-semibold">Not sure yet</span>
           <span className="mt-1 text-xs text-neutral-400">
@@ -82,7 +84,7 @@ export function BudgetStep({
 
       {budgetMismatch && selectedRange && (
         <p className="text-xs text-amber-300">
-          Your selections would typically land above this range. I&apos;ll suggest options like
+          Your selections would typically land above this range. I&apos;ll suggest options such as
           prioritising MVP features or using a more flexible timeline.
         </p>
       )}

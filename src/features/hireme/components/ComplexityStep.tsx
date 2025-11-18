@@ -77,6 +77,7 @@ export function ComplexityStep({ projectType, selected, onSelect }: ComplexitySt
                   ? "border-green-500 bg-green-500/10 text-neutral-100"
                   : "border-neutral-800 bg-neutral-950/40 text-neutral-200 hover:border-neutral-700"
               }`}
+              aria-pressed={isActive}
             >
               <span className="font-semibold flex items-center gap-1">
                 {labels[level]}
