@@ -12,6 +12,9 @@ const navItems: Record<string, {name: string, target?: string, icon?: ReactEleme
   '/projects': {
     name: 'projects',
   },
+  '/hire-me': {
+    name: 'hire me',
+  },
   '/resume': {
     name: 'resume',
     icon: <IoMdDownload />
