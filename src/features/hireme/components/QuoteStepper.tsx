@@ -11,6 +11,7 @@ interface QuoteStepperProps {
   onPrev: () => void;
   canGoNext: boolean;
   helperText?: string | null;
+  maxClickableStep?: number;
   onStepChange?: (step: number) => void;
 }
 
@@ -23,6 +24,7 @@ export function QuoteStepper({
   onPrev,
   canGoNext,
   helperText,
+  maxClickableStep,
   onStepChange,
 }: QuoteStepperProps) {
   return (
@@ -46,9 +48,10 @@ export function QuoteStepper({
           {Array.from({ length: totalSteps }, (_, index) => {
             const stepNumber = index + 1;
             const isCurrent = stepNumber === currentStep;
-            const isVisited = stepNumber <= currentStep;
+            const effectiveMax = maxClickableStep ?? currentStep;
+            const isVisited = stepNumber <= effectiveMax;
 
-            const canClick = !!onStepChange && stepNumber <= currentStep;
+            const canClick = !!onStepChange && stepNumber <= effectiveMax;
 
             return (
               <button

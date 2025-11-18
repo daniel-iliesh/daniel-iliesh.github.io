@@ -31,6 +31,7 @@ export default function HireMePage() {
     nextStep,
     prevStep,
     goToStep,
+    maxVisitedStep,
   } = useQuoteBuilder();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -71,6 +72,7 @@ export default function HireMePage() {
       onNext={nextStep}
       onPrev={prevStep}
       onStepChange={goToStep}
+      maxClickableStep={maxVisitedStep}
       canGoNext={
         state.currentStep === 6
           ? false

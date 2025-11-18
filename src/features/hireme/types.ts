@@ -48,6 +48,7 @@ export interface ContactDetails {
 
 export interface QuoteState {
   currentStep: number;
+  maxVisitedStep: number;
   projectType: ProjectType | null;
   basePrice: number;
   baseTimeline: TimelineRange | null;

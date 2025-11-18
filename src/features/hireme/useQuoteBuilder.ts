@@ -34,6 +34,7 @@ const INITIAL_CONTACT = {
 
 const INITIAL_STATE: QuoteState = {
   currentStep: 1,
+  maxVisitedStep: 1,
   projectType: null,
   basePrice: 0,
   baseTimeline: null,
@@ -242,6 +243,7 @@ export function useQuoteBuilder() {
     setState((prev) => ({
       ...prev,
       currentStep: Math.min(prev.currentStep + 1, 6),
+      maxVisitedStep: Math.max(prev.maxVisitedStep, Math.min(prev.currentStep + 1, 6)),
     }));
   }, []);
 
@@ -255,7 +257,7 @@ export function useQuoteBuilder() {
   const goToStep = useCallback((step: number) => {
     setState((prev) => ({
       ...prev,
-      currentStep: Math.min(Math.max(step, 1), 6),
+      currentStep: Math.min(Math.max(step, 1), prev.maxVisitedStep),
     }));
   }, []);
 
@@ -283,6 +285,7 @@ export function useQuoteBuilder() {
     priceAfterComplexity,
     priceAfterTimeline,
     roundedFinalPrice,
+    maxVisitedStep: state.maxVisitedStep,
     projectTypes: PROJECT_TYPES,
     budgetRanges: BUDGET_RANGES,
     featuresByProjectType: FEATURES_BY_PROJECT_TYPE,
