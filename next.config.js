@@ -2,7 +2,7 @@
  
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "export",
+  output: process.env.BUILD_STANDALONE === "true" ? "standalone" : "export",
   images: { unoptimized: true }
 }
  

@@ -1,0 +1,13 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_THEBACKEND_API_BASE_URL: "https://thebackend.rocket-champ.pw"
+    container_name: nextjs-web
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - HOSTNAME=0.0.0.0
