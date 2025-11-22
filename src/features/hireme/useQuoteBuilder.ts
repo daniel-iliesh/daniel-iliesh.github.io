@@ -90,17 +90,23 @@ export function useQuoteBuilder() {
 
     const estimatedDelivery = addWeeksToDate(new Date(), standardWeeks.max);
 
-    setState((prev) => ({
-      ...prev,
-      currentStep: Math.max(prev.currentStep, 1),
-      projectType,
-      basePrice: config.basePrice,
-      baseTimeline: config.baseTimeline,
-      selectedFeatures: [...baseFeatures, ...optionalFeatures],
-      featureAddOns,
-      estimatedWeeks: standardWeeks,
-      estimatedDelivery,
-    }));
+    setState((prev) => {
+      const finalPrice =
+        (config.basePrice + featureAddOns) * prev.complexityMultiplier * prev.timelineMultiplier;
+
+      return {
+        ...prev,
+        currentStep: Math.max(prev.currentStep, 1),
+        projectType,
+        basePrice: config.basePrice,
+        baseTimeline: config.baseTimeline,
+        selectedFeatures: [...baseFeatures, ...optionalFeatures],
+        featureAddOns,
+        estimatedWeeks: standardWeeks,
+        estimatedDelivery,
+        finalPrice,
+      };
+    });
   }, [state.complexity]);
 
   const toggleFeature = useCallback((projectType: ProjectType, feature: FeatureDefinition) => {
