@@ -10,8 +10,6 @@ services:
       - default
       - npm_default
     restart: always
-    ports:
-      - "3000:3000"
     environment:
       - HOSTNAME=0.0.0.0
 
