@@ -1,8 +1,10 @@
 import { notFound } from "next/navigation";
 import { CustomMDX } from "app/components/mdx";
-import { formatDate, getBlogPosts } from "app/blog/utils";
+import { getBlogPosts } from "app/blog/utils";
+import { formatDate } from "app/utils/date";
 import { baseUrl } from "app/sitemap";
 import { metadata } from "../page";
+import { AnimatedBlogPost } from "app/components/AnimatedBlogPost";
 
 export async function generateStaticParams() {
   let posts = getBlogPosts();
@@ -84,17 +86,12 @@ export default function Blog({ params }) {
           }),
         }}
       />
-      <h1 className="title font-semibold text-2xl tracking-tighter">
-        {post.metadata.title}
-      </h1>
-      <div className="flex justify-between items-center mt-2 mb-8 text-sm">
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">
-          {formatDate(post.metadata.publishedAt)}
-        </p>
-      </div>
-      <article className="prose">
+      <AnimatedBlogPost
+        title={post.metadata.title}
+        date={formatDate(post.metadata.publishedAt)}
+      >
         <CustomMDX source={post.content} />
-      </article>
+      </AnimatedBlogPost>
     </section>
   );
 }

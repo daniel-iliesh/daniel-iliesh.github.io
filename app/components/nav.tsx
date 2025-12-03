@@ -1,5 +1,8 @@
-import Link from 'next/link'
-import { ReactElement } from 'react'
+'use client';
+
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { ReactElement } from 'react';
 import { IoMdDownload } from "react-icons/io";
 
 const navItems: Record<string, {name: string, target?: string, icon?: ReactElement}> = {
@@ -22,24 +25,42 @@ const navItems: Record<string, {name: string, target?: string, icon?: ReactEleme
 }
 
 export function Navbar() {
+  const pathname = usePathname();
+
   return (
-    <aside className="-ml-[8px] mb-16 tracking-tight">
+    <aside className="-ml-1 sm:-ml-2 mb-8 sm:mb-16 tracking-tight">
       <div className="lg:sticky lg:top-20">
         <nav
-          className="flex flex-row items-start relative px-0 pb-0 fade md:overflow-auto scroll-pr-6 md:relative"
+          className="flex flex-row items-start relative pb-0 overflow-x-auto scrollbar-hide -mx-1 sm:-mx-2 px-1 sm:px-2"
           id="nav"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
-          <div className="flex flex-row space-x-0 pr-10">
+          <div className="flex flex-row space-x-0 sm:pr-10">
             {Object.entries(navItems).map(([path, { name, target, icon }]) => {
+              const isActive = pathname === path;
               return (
                 <Link
                   key={path}
                   href={path}
                   target={target}
-                  className="transition-all hover:text-neutral-800 dark:hover:text-neutral-200 flex align-middle items-center relative py-1 px-2 m-1"
+                  data-nav-item
+                  className={`transition-all duration-200 flex align-middle items-center relative py-2 px-2 sm:py-1 sm:px-2 sm:m-1 group touch-manipulation min-h-[44px] sm:min-h-0 ${
+                    isActive
+                      ? 'text-black dark:text-white font-medium'
+                      : 'text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-200'
+                  }`}
                 >
-                  {name}
-                  {icon}
+                  <span className="relative whitespace-nowrap text-sm sm:text-base">
+                    {name}
+                    {isActive && (
+                      <span className="absolute -bottom-1 left-0 right-0 h-px bg-black dark:bg-white" />
+                    )}
+                  </span>
+                  {icon && (
+                    <span className="ml-1 transition-transform duration-300 group-hover:translate-y-0.5 flex-shrink-0">
+                      {icon}
+                    </span>
+                  )}
                 </Link>
               )
             })}

@@ -1,9 +1,12 @@
 import { Projects } from "app/components/projects";
+import { AnimatedSection } from "app/components/AnimatedSection";
 
 export default function Page() {
     return (
         <section>
-            <h1 className="font-semibold text-2xl mb-8 tracking-tighter">My Projects</h1>
+            <AnimatedSection>
+                <h1 className="font-semibold text-xl sm:text-2xl mb-6 sm:mb-8 tracking-tighter">My Projects</h1>
+            </AnimatedSection>
             <Projects />
         </section>
     );

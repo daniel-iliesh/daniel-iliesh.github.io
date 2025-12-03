@@ -9,6 +9,7 @@ import Script from "next/script";
 import Footer from "./components/footer";
 import { baseUrl } from "./sitemap";
 import CalComPopupBtn from "./components/calcompopupbtn";
+import { PageTransition } from "./components/PageTransition";
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -64,7 +65,7 @@ export default function RootLayout({
         GeistMono.variable
       )}
     >
-      <body className="antialiased max-w-xl mx-4 mt-8 lg:mx-auto">
+      <body className="antialiased max-w-xl md:max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-3 sm:mx-4 mt-4 sm:mt-8 lg:mx-auto">
         {process.env.NODE_ENV === "production" && (
           <>
             <Script
@@ -82,14 +83,16 @@ export default function RootLayout({
             </Script>
           </>
         )}
-        <main className="flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0">
-          <Navbar />
-          {children}
-          <Footer />
-          <Analytics />
-          <SpeedInsights />
-          <CalComPopupBtn />
-        </main>
+        <PageTransition>
+          <main className="flex-auto min-w-0 mt-4 sm:mt-6 flex flex-col">
+            <Navbar />
+            {children}
+            <Footer />
+            <Analytics />
+            <SpeedInsights />
+            <CalComPopupBtn />
+          </main>
+        </PageTransition>
       </body>
     </html>
   );

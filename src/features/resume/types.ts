@@ -66,6 +66,13 @@ export interface Resume {
     fluency?: string;
   }
   
+  export enum ProjectType {
+    EMPLOYER = 'employer',
+    PERSONAL = 'personal',
+    CONTRACT = 'contract',
+    UNIVERSITY = 'university',
+  }
+
   export interface Project {
     name?: string;
     description?: string;
@@ -74,7 +81,7 @@ export interface Resume {
     url?: string;
     roles?: string[];
     entity?: string;
-    type?: string;
+    type?: ProjectType | string;
   }
   
   export interface Award {
