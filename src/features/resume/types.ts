@@ -74,6 +74,10 @@ export interface Resume {
   }
 
   export interface Project {
+    /**
+     * GitHub slug in the form "owner/repo" (matches backend project id).
+     */
+    id?: string;
     name?: string;
     description?: string;
     highlights?: string[];
