@@ -65,7 +65,7 @@ export default function RootLayout({
         GeistMono.variable
       )}
     >
-      <body className="antialiased max-w-xl md:max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-3 sm:mx-4 mt-4 sm:mt-8 lg:mx-auto">
+      <body className="antialiased max-w-xl md:max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto px-3 sm:px-4 mt-4 sm:mt-8">
         {process.env.NODE_ENV === "production" && (
           <>
             <Script
