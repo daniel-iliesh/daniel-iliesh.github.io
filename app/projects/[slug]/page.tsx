@@ -44,6 +44,23 @@ function sortLanguages(languages?: Record<string, number>) {
   return Object.entries(languages).sort(([, a], [, b]) => (b ?? 0) - (a ?? 0));
 }
 
+export async function generateStaticParams() {
+  try {
+    const resume = await fetchResume();
+    const projects = (resume?.projects ?? []) as Project[];
+    
+    return projects
+      .filter((project) => project?.name || project?.id)
+      .map((project) => {
+        const slug = project.id || (project.name ? slugifyProjectId(project.name) : '');
+        return { slug };
+      });
+  } catch (error) {
+    console.error('Failed to generate static params for projects:', error);
+    return [];
+  }
+}
+
 export default async function ProjectDetailPage({
   params,
 }: {
