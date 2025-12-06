@@ -49,9 +49,10 @@ function sortLanguages(languages?: Record<string, number>) {
 export default async function ProjectDetailPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const slug = decodeURIComponent(params.slug);
+  const { slug: slugParam } = await params;
+  const slug = decodeURIComponent(slugParam);
 
   const detail = await fetchProjectDetail(slug, DEFAULT_BRANCH).catch(() => null);
 
