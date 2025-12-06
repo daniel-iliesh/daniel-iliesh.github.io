@@ -101,6 +101,16 @@ html {
   @apply font-medium;
 }
 
+.lightbox-open [data-cal-link],
+.lightbox-open [data-cal-namespace],
+.lightbox-open [id*="calcom"],
+.lightbox-open [class*="Cal__Floating"],
+.lightbox-open .calcom-floating-button,
+.lightbox-open [class*="calcom-fb"],
+.lightbox-open [data-cal-theme] {
+  display: none !important;
+}
+
 .prose img {
   /* Don't apply styles to next/image */
   @apply m-0;

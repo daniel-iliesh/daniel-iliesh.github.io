@@ -37,7 +37,9 @@ export function Navbar() {
         >
           <div className="flex flex-row space-x-0 sm:pr-10">
             {Object.entries(navItems).map(([path, { name, target, icon }]) => {
-              const isActive = pathname === path;
+              const isProjects = path === '/projects' && pathname?.startsWith('/projects');
+              const isExact = pathname === path;
+              const isActive = isProjects || isExact;
               return (
                 <Link
                   key={path}

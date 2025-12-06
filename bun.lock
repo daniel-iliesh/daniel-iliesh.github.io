@@ -25,6 +25,7 @@
         "sugar-high": "^0.6.0",
         "tailwindcss": "4.0.0-alpha.13",
         "typescript": "5.3.3",
+        "yet-another-react-lightbox-lite": "^1.10.0",
       },
     },
   },
@@ -464,6 +465,8 @@
     "vfile-message": ["vfile-message@3.1.4", "", { "dependencies": { "@types/unist": "^2.0.0", "unist-util-stringify-position": "^3.0.0" } }, "sha512-fa0Z6P8HUrQN4BZaX05SIVXic+7kE3b05PWAtPuYP9QLHsLKYR7/AlLW3NtOrpXRLeawpDLMsVkmk5DG0NXgWw=="],
 
     "w3c-keyname": ["w3c-keyname@2.2.8", "", {}, "sha512-dpojBhNsCNN7T82Tm7k26A6G9ML3NkhDsnw9n/eoxSRlVBB4CEtIQ/KTCLI2Fwf3ataSXRhYFkQi3SlnFwPvPQ=="],
+
+    "yet-another-react-lightbox-lite": ["yet-another-react-lightbox-lite@1.10.0", "", { "peerDependencies": { "@types/react": "^18 || ^19", "@types/react-dom": "^18 || ^19", "react": "^18 || ^19", "react-dom": "^18 || ^19" }, "optionalPeers": ["@types/react", "@types/react-dom"] }, "sha512-T9zsIN3bEgbnnCegqhurlHifBuG3tIe/WflmGMQ4KyyGB3//WoCN4f5KrWnuG2oz69MuefJq/E5rARhanNr02Q=="],
 
     "zwitch": ["zwitch@2.0.4", "", {}, "sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A=="],
 
