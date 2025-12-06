@@ -2,97 +2,19 @@
 
 import { useRouter } from "next/navigation";
 import { ExternalLink, Github } from "lucide-react";
-import { useEffect, useState } from "react";
-import { fetchResume } from "src/features/resume/api";
-import type { Project } from "src/features/resume/types";
-import { fetchProjectDetail, fetchProjectMedia } from "src/features/projects/api";
+import { useState } from "react";
+import type { ProjectWithCover } from "app/lib/projectsData";
 import { getProjectTypeInfo } from "../utils/projectTypes";
 import { slugifyProjectId } from "../utils/slugify";
 import Image from "next/image";
-import { mergeProjectData } from "src/features/projects/merge";
-import type { ProjectDetail } from "src/features/projects/types";
 
-export function Projects() {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [backendDetails, setBackendDetails] = useState<Record<string, ProjectDetail>>({});
-  const [coverMap, setCoverMap] = useState<Record<string, string | null>>({});
+export interface ProjectsProps {
+  projects: ProjectWithCover[];
+}
+
+export function Projects({ projects }: ProjectsProps) {
   const [coverLoaded, setCoverLoaded] = useState<Record<string, boolean>>({});
-  const [loading, setLoading] = useState(true);
   const router = useRouter();
-
-  useEffect(() => {
-    fetchResume()
-      .then((resume) => {
-      const resumeProjects = (resume?.projects ?? []) as Project[];
-        setProjects(resumeProjects);
-        return resumeProjects;
-      })
-      .then((resumeProjects) => {
-        const slugs = resumeProjects
-          .map((project) => project.id || (project.name ? slugifyProjectId(project.name) : null))
-          .filter(Boolean) as string[];
-
-        return Promise.all(
-          slugs.map(async (slug) => {
-            const result: { slug: string; url: string | null; detail: ProjectDetail | null } = {
-              slug,
-              url: null,
-              detail: null,
-            };
-
-            try {
-              const detail = await fetchProjectDetail(slug, "main");
-              result.detail = detail;
-
-              const branch = detail?.branch || (detail as any)?.default_branch || "main";
-
-              const medias = await fetchProjectMedia(slug, "media", branch);
-              const isImage = (name?: string) => !!name && /\.(png|jpe?g|webp|gif|svg)$/i.test(name);
-              const coverMedia =
-                medias.find((m) => isImage(m.name) && /cover/i.test(m.name ?? "")) ||
-                medias.find((m) => isImage(m.name));
-              const url =
-                coverMedia?.download_url ||
-                coverMedia?.path ||
-                coverMedia?.html_url ||
-                coverMedia?.url ||
-                null;
-              result.url = url;
-            } catch {
-              result.url = null;
-            }
-
-            return result;
-          })
-        );
-      })
-      .then((covers) => {
-        const map: Record<string, string | null> = {};
-        const detailMap: Record<string, ProjectDetail> = {};
-        covers?.forEach(({ slug, url, detail }) => {
-          map[slug] = url;
-          if (detail) {
-            detailMap[slug] = detail;
-          }
-        });
-        setCoverMap(map);
-        setBackendDetails(detailMap);
-      })
-      .finally(() => setLoading(false));
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="space-y-6">
-        {[1, 2, 3].map((i) => (
-          <div
-            key={i}
-            className="h-32 bg-neutral-100 dark:bg-neutral-900/50 rounded-lg animate-pulse"
-          />
-        ))}
-      </div>
-    );
-  }
 
   if (!projects.length) {
     return (
@@ -107,23 +29,19 @@ export function Projects() {
       {projects
         .filter((project) => project?.name)
         .map((project) => {
-          const slug =
-            project.id ||
-            (project.name ? slugifyProjectId(project.name) : undefined);
-          const backendDetail = slug ? backendDetails[slug] : undefined;
-          const merged = mergeProjectData(project, backendDetail);
+          const slug = project.id || (project.name ? slugifyProjectId(project.name) : undefined);
 
           const metadataParts: string[] = [];
-          const startDate = merged.startDate;
-          const endDate = merged.endDate;
+          const startDate = project.startDate;
+          const endDate = project.endDate;
           const dateRange =
             startDate || endDate ? `${startDate ?? "Start"} — ${endDate ?? "Present"}` : null;
-          const roles = merged.roles?.filter(Boolean) ?? [];
-          const projectTypeInfo = getProjectTypeInfo(merged.type);
-          const description = merged.description;
+          const roles = project.roles?.filter(Boolean) ?? [];
+          const projectTypeInfo = getProjectTypeInfo(project.type);
+          const description = project.description;
 
-          if (merged.entity) {
-            metadataParts.push(merged.entity);
+          if (project.entity) {
+            metadataParts.push(project.entity);
           }
 
           if (roles.length) {
@@ -134,14 +52,14 @@ export function Projects() {
           }
 
           const repoUrl =
-            merged.id && merged.id.includes("/")
-              ? `https://github.com/${merged.id}`
-              : merged.url && merged.url.includes("github.com")
-              ? merged.url
+            project.id && project.id.includes("/")
+              ? `https://github.com/${project.id}`
+              : project.url && project.url.includes("github.com")
+              ? project.url
               : null;
-          const isPrivateRepo = backendDetail?.visibility === "private";
+          const isPrivateRepo = project.isPrivate;
 
-          const coverUrl = slug ? coverMap[slug] ?? null : null;
+          const coverUrl = project.coverUrl ?? null;
 
           const hasCover = !!coverUrl;
 
@@ -211,7 +129,7 @@ export function Projects() {
                     </div>
                   </div>
                   <div className="flex flex-wrap items-center gap-2 sm:gap-2 self-start sm:self-auto min-h-[32px]">
-                  {repoUrl && !isPrivateRepo && (
+                    {repoUrl && !isPrivateRepo && (
                       <a
                         href={repoUrl}
                         target="_blank"
@@ -269,12 +187,8 @@ export function Projects() {
                             : "bg-neutral-100 text-neutral-600 dark:bg-neutral-900 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-800"
                         }`}
                         onClick={(event) => {
-                          // Prevent triggering card navigation when opening keyword search.
                           event.stopPropagation();
-                          window.open(
-                            `https://www.google.com/search?q=${keyword}`,
-                            "_blank"
-                          );
+                          window.open(`https://www.google.com/search?q=${keyword}`, "_blank");
                         }}
                       >
                         {keyword}
@@ -289,3 +203,5 @@ export function Projects() {
     </div>
   );
 }
+
+export default Projects;

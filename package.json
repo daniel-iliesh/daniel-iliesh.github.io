@@ -1,9 +1,12 @@
 {
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "dev": "bunx next dev",
+    "build": "bunx next build",
+    "start": "bunx next start",
+    "lint": "bunx next lint",
+    "analyze": "ANALYZE=true bunx next build",
+    "format": "bunx prettier --write \"**/*.{js,jsx,ts,tsx,mdx,css,json}\""
   },
   "dependencies": {
     "@codemirror/lang-json": "^6.0.2",
