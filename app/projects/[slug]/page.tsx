@@ -11,6 +11,7 @@ import { CustomMDX } from "app/components/mdx";
 import { fetchResume } from "src/features/resume/api";
 import type { Project } from "src/features/resume/types";
 import { mergeProjectData } from "src/features/projects/merge";
+import { ScrollToTopOnMount } from "app/components/ScrollToTopOnMount";
 
 const DEFAULT_BRANCH = "main";
 const MEDIA_FOLDER = "media";
@@ -179,6 +180,7 @@ export default async function ProjectDetailPage({
 
   return (
     <PageTransition>
+      <ScrollToTopOnMount />
       <section className="space-y-8">
         {heroMedia ? (
           <div className="relative overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-900">

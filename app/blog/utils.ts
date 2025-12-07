@@ -11,7 +11,12 @@ type Metadata = {
 function parseFrontmatter(fileContent: string) {
   let frontmatterRegex = /---\s*([\s\S]*?)\s*---/
   let match = frontmatterRegex.exec(fileContent)
-  let frontMatterBlock = match![1]
+
+  if (!match) {
+    return { metadata: {}, content: fileContent }
+  }
+
+  let frontMatterBlock = match[1]
   let content = fileContent.replace(frontmatterRegex, '').trim()
   let frontMatterLines = frontMatterBlock.trim().split('\n')
   let metadata: Partial<Metadata> = {}
@@ -26,30 +31,45 @@ function parseFrontmatter(fileContent: string) {
   return { metadata: metadata as Metadata, content }
 }
 
-function getMDXFiles(dir) {
-  return fs.readdirSync(dir).filter((file) => path.extname(file) === '.mdx')
-}
+function resolvePostsDir() {
+  const candidates = [
+    path.join(process.cwd(), 'app', 'blog', 'posts'),
+    path.join(process.cwd(), 'blog', 'posts'),
+    path.join(__dirname, 'posts'),
+    path.join(__dirname, '../posts'),
+    path.join(__dirname, '../../posts'),
+    path.join(__dirname, '../../blog', 'posts'),
+  ]
 
-function readMDXFile(filePath) {
-  let rawContent = fs.readFileSync(filePath, 'utf-8')
-  return parseFrontmatter(rawContent)
-}
-
-function getMDXData(dir) {
-  let mdxFiles = getMDXFiles(dir)
-  return mdxFiles.map((file) => {
-    let { metadata, content } = readMDXFile(path.join(dir, file))
-    let slug = path.basename(file, path.extname(file))
-
-    return {
-      metadata,
-      slug,
-      content,
+  for (const dir of candidates) {
+    if (fs.existsSync(dir)) {
+      return dir
     }
+  }
+
+  return null
+}
+
+function getMDXData(dir: string) {
+  const files = fs.readdirSync(dir).filter((file) => path.extname(file) === '.mdx')
+
+  return files.map((file) => {
+    const filePath = path.join(dir, file)
+    const rawContent = fs.readFileSync(filePath, 'utf-8')
+    const { metadata, content } = parseFrontmatter(rawContent)
+    const slug = path.basename(file, path.extname(file))
+
+    return { metadata: metadata as Metadata, slug, content }
   })
 }
 
 export function getBlogPosts() {
-  return getMDXData(path.join(process.cwd(), 'app', 'blog', 'posts'))
+  const dir = resolvePostsDir()
+
+  if (!dir) {
+    return []
+  }
+
+  return getMDXData(dir)
 }
 

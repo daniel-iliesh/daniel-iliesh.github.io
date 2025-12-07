@@ -7,6 +7,8 @@ export const metadata = {
   description: 'Read my blog.',
 }
 
+export const dynamic = 'force-static'
+
 export default function Page() {
   const posts = getBlogPosts()
   return (

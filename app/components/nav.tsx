@@ -26,6 +26,7 @@ const navItems: Record<string, {name: string, target?: string, icon?: ReactEleme
 
 export function Navbar() {
   const pathname = usePathname();
+  const normalizedPath = pathname?.replace(/\/$/, '') || '/';
 
   return (
     <aside className="-ml-1 sm:-ml-2 mb-8 sm:mb-16 tracking-tight">
@@ -37,9 +38,11 @@ export function Navbar() {
         >
           <div className="flex flex-row space-x-0 sm:pr-10">
             {Object.entries(navItems).map(([path, { name, target, icon }]) => {
-              const isProjects = path === '/projects' && pathname?.startsWith('/projects');
-              const isExact = pathname === path;
-              const isActive = isProjects || isExact;
+              const entryPath = path === '/' ? '/' : path.replace(/\/$/, '');
+              const isProjects = entryPath === '/projects' && normalizedPath.startsWith('/projects');
+              const isBlog = entryPath === '/blog' && normalizedPath.startsWith('/blog');
+              const isExact = normalizedPath === entryPath;
+              const isActive = isProjects || isBlog || isExact;
               return (
                 <Link
                   key={path}
