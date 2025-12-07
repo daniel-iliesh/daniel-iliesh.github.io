@@ -26,7 +26,7 @@ export default async function Page() {
   return (
     <section>
       <AnimatedHero
-        name={basics.name ?? ""}
+                    name={basics.name ?? ""}
         label={basics.label ?? ""}
         image={basics.image ?? ""}
         url={basics.url}

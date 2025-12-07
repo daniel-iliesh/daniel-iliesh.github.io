@@ -34,7 +34,7 @@ export default function Footer() {
             href="/rss"
           >
             <span className="transition-transform duration-300 group-hover:-rotate-45 flex-shrink-0">
-              <ArrowIcon />
+            <ArrowIcon />
             </span>
             <p className="ml-2 text-sm sm:text-base">rss</p>
           </a>
@@ -47,7 +47,7 @@ export default function Footer() {
             href={ghProfile.html_url}
           >
             <span className="transition-transform duration-300 group-hover:-rotate-45 flex-shrink-0">
-              <ArrowIcon />
+            <ArrowIcon />
             </span>
             <p className="ml-2 text-sm sm:text-base">github</p>
           </a>
@@ -60,7 +60,7 @@ export default function Footer() {
             href={`${ghProfile.html_url}/${ghProfile.blog}`}
           >
             <span className="transition-transform duration-300 group-hover:-rotate-45 flex-shrink-0">
-              <ArrowIcon />
+            <ArrowIcon />
             </span>
             <p className="ml-2 text-sm sm:text-base">view source</p>
           </a>
@@ -69,7 +69,7 @@ export default function Footer() {
       <div className="mt-6 sm:mt-8 space-y-3 sm:space-y-4 text-neutral-600 dark:text-neutral-300">
         <p className="text-sm sm:text-base">
           © {new Date().getFullYear()} Daniel Ilies. All rights reserved.
-        </p>
+      </p>
         <div className="text-xs sm:text-sm space-y-1 text-neutral-500 dark:text-neutral-400 leading-relaxed">
           <p className="font-semibold text-neutral-700 dark:text-neutral-300">Legal Information:</p>
           <p>ILIEŞ VEACESLAV DANIEL PERSOANĂ FIZICĂ AUTORIZATĂ</p>

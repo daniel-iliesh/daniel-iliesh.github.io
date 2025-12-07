@@ -66,7 +66,9 @@ export function Projects({ projects }: ProjectsProps) {
           return (
             <article
               key={project.name}
-              className="relative flex flex-col space-y-2 p-3 sm:p-4 rounded-lg border border-neutral-200/70 dark:border-neutral-800/70 shadow-sm hover:shadow-md transition-colors duration-300 hover:bg-neutral-50 dark:hover:bg-neutral-900/50 group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 overflow-hidden"
+              className={`santa-interactive relative flex flex-col space-y-2 p-3 sm:p-4 rounded-lg border border-neutral-200/70 dark:border-neutral-800/70 shadow-sm hover:shadow-md transition-colors duration-300 hover:bg-neutral-50 dark:hover:bg-neutral-900/50 group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 overflow-hidden ${
+                hasCover ? "" : "bg-black text-white"
+              }`}
               tabIndex={slug ? 0 : -1}
               role={slug ? "button" : "article"}
               onClick={() => {
@@ -83,7 +85,7 @@ export function Projects({ projects }: ProjectsProps) {
               }}
             >
               {coverUrl && (
-                <div className="absolute inset-0">
+                <div className="absolute inset-0 rounded-lg overflow-hidden">
                   <Image
                     src={coverUrl}
                     alt={project.name ?? "Project cover"}
@@ -98,7 +100,7 @@ export function Projects({ projects }: ProjectsProps) {
                       }))
                     }
                   />
-                  <div className="absolute inset-0 bg-black/90 pointer-events-none" />
+                  <div className="absolute inset-0 bg-black/95 pointer-events-none" />
                   {!coverLoaded[slug ?? project.name ?? ""] && (
                     <div className="absolute inset-0 bg-neutral-900 animate-pulse" />
                   )}

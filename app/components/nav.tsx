@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ReactElement } from 'react';
+import { FaGamepad } from 'react-icons/fa';
 import { IoMdDownload } from "react-icons/io";
 
 const navItems: Record<string, {name: string, target?: string, icon?: ReactElement}> = {
@@ -21,7 +22,7 @@ const navItems: Record<string, {name: string, target?: string, icon?: ReactEleme
   '/resume': {
     name: 'resume',
     icon: <IoMdDownload />
-  },
+  }
 }
 
 export function Navbar() {

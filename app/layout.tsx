@@ -11,6 +11,10 @@ import Footer from "./components/footer";
 import { baseUrl } from "./sitemap";
 import CalComPopupBtn from "./components/calcompopupbtn";
 import { PageTransition } from "./components/PageTransition";
+import { ParallaxBackground } from "./components/ParallaxBackground";
+import { SantaLayer } from "./components/SantaLayer";
+import { SnowOverlay } from "./components/SnowOverlay";
+import { Lightrope } from "./components/Lightrope";
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -57,6 +61,30 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const now = new Date();
+  const month = now.getMonth(); // 0-based
+  const isSeasonDefault = month === 11 || month === 0; // December or January
+
+  const parseSeasonalFlag = (value: string | undefined, seasonalDefault: boolean) => {
+    if (value === "true") return true;
+    if (value === "false") return false;
+    if (value === "auto") return seasonalDefault;
+    return seasonalDefault; // undefined or anything else falls back to seasonal
+  };
+
+  const isSnowEnabled = parseSeasonalFlag(
+    process.env.NEXT_PUBLIC_ENABLE_SNOW,
+    isSeasonDefault
+  );
+  const isSantaEnabled = parseSeasonalFlag(
+    process.env.NEXT_PUBLIC_ENABLE_SANTA,
+    isSeasonDefault
+  );
+  const isLightsEnabled = parseSeasonalFlag(
+    process.env.NEXT_PUBLIC_ENABLE_LIGHTROPE,
+    isSeasonDefault
+  );
+
   return (
     <html
       lang="en"
@@ -67,6 +95,10 @@ export default function RootLayout({
       )}
     >
       <body className="antialiased max-w-xl md:max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto px-3 sm:px-4 mt-4 sm:mt-8">
+        <ParallaxBackground />
+        {isLightsEnabled && <Lightrope />}
+        {isSnowEnabled && <SnowOverlay enabled={isSnowEnabled} />}
+        {isSantaEnabled && <SantaLayer />}
         {process.env.NODE_ENV === "production" && (
           <>
             <Script
@@ -86,13 +118,13 @@ export default function RootLayout({
         )}
         <PageTransition>
           <main className="flex-auto min-w-0 mt-4 sm:mt-6 flex flex-col">
-            <Navbar />
-            {children}
-            <Footer />
-            <Analytics />
-            <SpeedInsights />
-            <CalComPopupBtn />
-          </main>
+          <Navbar />
+          {children}
+          <Footer />
+          <Analytics />
+          <SpeedInsights />
+          <CalComPopupBtn />
+        </main>
         </PageTransition>
       </body>
     </html>
