@@ -1,16 +1,14 @@
-import Projects from "app/components/projects";
-import { AnimatedSection } from "app/components/AnimatedSection";
 import { fetchMergedProjects } from "app/lib/projectsData";
+import { ProjectsProvider } from "app/components/ProjectsProvider";
+import { ProjectsClient } from "app/components/ProjectsClient";
 
 export default async function Page() {
-  const projects = await fetchMergedProjects();
+  // Fetch once on server, then cache in Zustand
+  const projects = await fetchMergedProjects().catch(() => []);
 
-    return (
-        <section>
-            <AnimatedSection>
-                <h1 className="font-semibold text-xl sm:text-2xl mb-6 sm:mb-8 tracking-tighter">My Projects</h1>
-            </AnimatedSection>
-      <Projects projects={projects} />
-        </section>
-    );
+  return (
+    <ProjectsProvider initialProjects={projects}>
+      <ProjectsClient />
+    </ProjectsProvider>
+  );
 }

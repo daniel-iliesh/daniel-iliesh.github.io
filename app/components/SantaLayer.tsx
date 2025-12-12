@@ -1,14 +1,14 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { SantaSprite } from './SantaSprite';
+import { LazySanta } from './LazySanta';
 
 export function SantaLayer() {
   const pathname = usePathname();
   if (pathname?.startsWith('/santa-game')) return null;
 
   return (
-    <SantaSprite
+    <LazySanta
       enabled={true}
       scale={0.15}
       gravity={0.5}

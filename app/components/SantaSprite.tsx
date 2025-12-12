@@ -3,6 +3,10 @@
 import { useEffect, useRef, useState } from 'react';
 import * as PIXI from 'pixi.js';
 
+// Global flag to prevent multiple Santa instances
+let santaInstanceCount = 0;
+let globalSantaApp: PIXI.Application | null = null;
+
 const rand = (min: number, max: number) => Math.random() * (max - min) + min;
 
 interface HitboxPadding {
@@ -32,11 +36,28 @@ export function SantaSprite({
 }: SantaSpriteProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const appRef = useRef<PIXI.Application | null>(null);
-  const overlayRef = useRef<HTMLDivElement>(null);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [_isLoaded, setIsLoaded] = useState(false);
+  const isInitializedRef = useRef(false);
 
   useEffect(() => {
     if (!enabled || !containerRef.current) return;
+    
+    // Check if there's already a Santa canvas in the DOM
+    const existingCanvas = document.querySelector('canvas[data-santa="true"]') as HTMLCanvasElement;
+    if (existingCanvas) {
+      // If canvas exists but isn't in our container, move it
+      if (existingCanvas.parentNode !== containerRef.current) {
+        containerRef.current.appendChild(existingCanvas);
+      }
+      return; // Don't create a new instance
+    }
+    
+    // Prevent multiple initializations - check both local and global state
+    if (isInitializedRef.current || santaInstanceCount > 0 || globalSantaApp !== null) {
+      return;
+    }
+    isInitializedRef.current = true;
+    santaInstanceCount++;
 
     let app: PIXI.Application;
     let santa: PIXI.AnimatedSprite;
@@ -56,9 +77,8 @@ export function SantaSprite({
     let isPreloading = true;
     let preloadBaseX = 0;
     let preloadBaseY = 0;
-    let entranceStart = 0;
-    const entranceDuration = 900; // ms
-    let overlayEl: HTMLDivElement | null = null;
+    let _entranceStart = 0;
+    const _entranceDuration = 900; // ms
     let isEntering = false;
     let facing: -1 | 1 = 1;
     let prevTouchAction: string | null = null;
@@ -113,6 +133,18 @@ export function SantaSprite({
     };
     const startJumpAnimation = () => {
       if (!santa) return;
+      // If jump textures aren't loaded yet, fall back to idle
+      if (jumpTextures.length === 0) {
+        if (idleTextures.length > 0) {
+          currentAnimation = 'idle';
+          santa.onComplete = undefined;
+          santa.textures = idleTextures;
+          santa.animationSpeed = animSpeeds.idle;
+          santa.loop = true;
+          santa.play();
+        }
+        return;
+      }
       currentAnimation = 'jump';
       santa.onComplete = undefined;
       santa.textures = jumpTextures;
@@ -122,6 +154,8 @@ export function SantaSprite({
       const midFrame = Math.max(0, Math.floor(jumpTextures.length / 2));
       santa.gotoAndStop(midFrame);
     };
+
+    let cleanupFn: (() => void) | null = null;
 
     const init = async () => {
       // Create PixiJS app
@@ -135,8 +169,15 @@ export function SantaSprite({
       });
 
       if (containerRef.current) {
+        // Check again if another instance was created while we were initializing
+        if (globalSantaApp && globalSantaApp !== app) {
+          app.destroy(true, { children: true });
+          return;
+        }
+        
         containerRef.current.appendChild(app.canvas as HTMLCanvasElement);
         const canvasEl = app.canvas as HTMLCanvasElement;
+        canvasEl.setAttribute('data-santa', 'true');
         canvasEl.style.position = 'fixed';
         canvasEl.style.top = '0';
         canvasEl.style.left = '0';
@@ -144,22 +185,22 @@ export function SantaSprite({
         canvasEl.style.height = '100%';
         canvasEl.style.pointerEvents = 'none';
         canvasEl.style.zIndex = '9999';
-        // Fullscreen dark overlay during preload
-        overlayEl = document.createElement('div');
-        overlayEl.style.position = 'fixed';
-        overlayEl.style.inset = '0';
-        overlayEl.style.background = 'rgba(0,0,0,0.92)';
-        overlayEl.style.zIndex = '9998';
-        overlayEl.style.pointerEvents = 'none';
-        overlayEl.style.transition = 'opacity 250ms ease';
-        overlayEl.style.opacity = '1';
-        containerRef.current.appendChild(overlayEl);
-        overlayRef.current = overlayEl;
       }
 
       appRef.current = app;
+      globalSantaApp = app;
 
-      // Load sprite frames
+      // Define endPreload function early so it can be called immediately after texture loading
+      const endPreload = () => {
+        if (!isPreloading) return;
+        isPreloading = false;
+        _entranceStart = performance.now();
+        isEntering = true;
+        velocity = { x: 0, y: 0 };
+        aiNextActionAt = performance.now() + 1500;
+      };
+
+      // Load sprite frames with progressive loading
       const idleFrameCount = 16;
       const jumpFrameCount = 16;
       const walkFrameCount = 13;
@@ -167,39 +208,63 @@ export function SantaSprite({
       const slideFrameCount = 11;
       const deadFrameCount = 17;
 
-      // Load Idle animation frames
+      // Preload critical animations first (idle, walk)
+      const criticalPromises: Promise<PIXI.Texture>[] = [];
+      
+      // Load Idle animation frames (critical for initial display)
       for (let i = 1; i <= idleFrameCount; i++) {
-        const texture = await PIXI.Assets.load(`/img/SantaSprites/webp/Idle (${i}).webp`);
-        idleTextures.push(texture);
+        criticalPromises.push(PIXI.Assets.load(`/img/SantaSprites/webp/Idle (${i}).webp`));
       }
-
-      // Load Jump animation frames
-      for (let i = 1; i <= jumpFrameCount; i++) {
-        const texture = await PIXI.Assets.load(`/img/SantaSprites/webp/Jump (${i}).webp`);
-        jumpTextures.push(texture);
-      }
-
-      // Load Walk animation frames
+      
+      // Load Walk animation frames (critical for movement)
       for (let i = 1; i <= walkFrameCount; i++) {
-        const texture = await PIXI.Assets.load(`/img/SantaSprites/webp/Walk (${i}).webp`);
-        walkTextures.push(texture);
+        criticalPromises.push(PIXI.Assets.load(`/img/SantaSprites/webp/Walk (${i}).webp`));
       }
 
-      for (let i = 1; i <= runFrameCount; i++) {
-        const texture = await PIXI.Assets.load(`/img/SantaSprites/webp/Run (${i}).webp`);
-        runTextures.push(texture);
-      }
+      // Wait for critical frames to load
+      const criticalTextures = await Promise.all(criticalPromises);
+      idleTextures = criticalTextures.slice(0, idleFrameCount);
+      walkTextures = criticalTextures.slice(idleFrameCount);
 
-      for (let i = 1; i <= slideFrameCount; i++) {
-        const texture = await PIXI.Assets.load(`/img/SantaSprites/webp/Slide (${i}).webp`);
-        slideTextures.push(texture);
-      }
+      // Start Santa immediately after critical textures are ready
+      endPreload();
 
-      for (let i = 1; i <= deadFrameCount; i++) {
-        const texture = await PIXI.Assets.load(`/img/SantaSprites/webp/Dead (${i}).webp`);
-        deadTextures.push(texture);
-      }
-      deadReverseTextures = [...deadTextures].slice().reverse();
+      // Load non-critical animations in background
+      const loadNonCritical = async () => {
+        // Load Jump animation frames
+        for (let i = 1; i <= jumpFrameCount; i++) {
+          const texture = await PIXI.Assets.load(`/img/SantaSprites/webp/Jump (${i}).webp`);
+          jumpTextures.push(texture);
+        }
+
+        // Load other animations
+        const otherPromises: Promise<PIXI.Texture>[] = [];
+        for (let i = 1; i <= runFrameCount; i++) {
+          otherPromises.push(PIXI.Assets.load(`/img/SantaSprites/webp/Run (${i}).webp`));
+        }
+        for (let i = 1; i <= slideFrameCount; i++) {
+          otherPromises.push(PIXI.Assets.load(`/img/SantaSprites/webp/Slide (${i}).webp`));
+        }
+        for (let i = 1; i <= deadFrameCount; i++) {
+          otherPromises.push(PIXI.Assets.load(`/img/SantaSprites/webp/Dead (${i}).webp`));
+        }
+        
+        const otherTextures = await Promise.all(otherPromises);
+        let idx = 0;
+        for (let i = 1; i <= runFrameCount; i++) {
+          runTextures.push(otherTextures[idx++]);
+        }
+        for (let i = 1; i <= slideFrameCount; i++) {
+          slideTextures.push(otherTextures[idx++]);
+        }
+        for (let i = 1; i <= deadFrameCount; i++) {
+          deadTextures.push(otherTextures[idx++]);
+        }
+        deadReverseTextures = [...deadTextures].slice().reverse();
+      };
+
+      // Start loading non-critical animations without blocking
+      loadNonCritical();
 
       // Create animated sprite starting with walk (for entrance)
       santa = new PIXI.AnimatedSprite(walkTextures);
@@ -219,13 +284,13 @@ export function SantaSprite({
       const spriteWidth = santa.width;
       const spriteHeight = santa.height;
       const halfH = spriteHeight / 2;
-      const halfW = spriteWidth / 2;
+      const _halfW = spriteWidth / 2;
       const padTopPx = (padding.top ?? 0) * scale;
       const padBottomPx = (padding.bottom ?? 0) * scale;
       const padLeftPx = (padding.left ?? 0) * scale;
       const padRightPx = (padding.right ?? 0) * scale;
 
-      const effectiveHalfHBottom = Math.max(halfH - padBottomPx, halfH * 0.5);
+      const _effectiveHalfHBottom = Math.max(halfH - padBottomPx, halfH * 0.5);
 
       santa.x = window.innerWidth * 0.5;
       santa.y = window.innerHeight * 0.45;
@@ -246,12 +311,11 @@ export function SantaSprite({
 
       // Entrance animation target (bottom-left padding)
       // We will fall from preload position; target is just below the screen bottom padding
-      const entranceTargetX = santa.x;
 
       // Drag and drop handlers using window events so the page remains clickable
       let dragOffset = { x: 0, y: 0 };
       let lastMousePos = { x: 0, y: 0 };
-      let lastSantaPos = { x: santa.x, y: santa.y };
+      let _lastSantaPos = { x: santa.x, y: santa.y };
 
       const getBounds = () => {
         if (!santa) return null;
@@ -287,7 +351,7 @@ export function SantaSprite({
         }
 
         if (isDragging) {
-          lastSantaPos = { x: santa.x, y: santa.y };
+          _lastSantaPos = { x: santa.x, y: santa.y };
           santa.x = x - dragOffset.x;
           santa.y = y - dragOffset.y;
 
@@ -322,7 +386,7 @@ export function SantaSprite({
           y: y - santa.y,
         };
         lastMousePos = { x, y };
-        lastSantaPos = { x: santa.x, y: santa.y };
+        _lastSantaPos = { x: santa.x, y: santa.y };
 
         // Switch to jump animation when picked up
         wakeSantaForDrag();
@@ -358,23 +422,9 @@ export function SantaSprite({
       window.addEventListener('pointerup', onWindowPointerUp, { passive: false, capture: true });
       window.addEventListener('click', onWindowClickCapture, true);
 
-      const endPreload = () => {
-        if (!isPreloading) return;
-        isPreloading = false;
-        entranceStart = performance.now();
-        isEntering = true;
-        velocity = { x: 0, y: 0 };
-        aiNextActionAt = performance.now() + 1500;
-        if (overlayEl) {
-          overlayEl.style.opacity = '0';
-          window.setTimeout(() => {
-            overlayEl?.remove();
-            overlayRef.current = null;
-          }, 260);
-        }
-      };
-      window.addEventListener('load', endPreload, { once: true });
-      const preloadTimeout = window.setTimeout(endPreload, 2500);
+      // Start Santa animation immediately after textures load, no artificial delays
+      // Only use timeout as fallback for very slow connections
+      const preloadTimeout = window.setTimeout(endPreload, 1000);
 
       // Mark external FAB (Cal.com) as interactive so Santa can land on it
       const markInteractiveFab = () => {
@@ -393,8 +443,17 @@ export function SantaSprite({
       });
       observer.observe(document.body, { childList: true, subtree: true });
 
-      // Physics and animation loop
+      // Physics and animation loop with frame skipping for performance
+      let frameSkipCounter = 0;
+      const frameSkipInterval = 2; // Skip every 2nd frame on slow devices
+      
       app.ticker.add(() => {
+        // Frame skipping on low-end devices
+        frameSkipCounter++;
+        if (frameSkipCounter % frameSkipInterval === 0 && app.ticker.FPS < 30) {
+          return;
+        }
+        
         const spriteWidth = santa.width;
         const spriteHeight = santa.height;
         const halfW = spriteWidth / 2;
@@ -528,7 +587,7 @@ export function SantaSprite({
             const impactSpeed = Math.abs(velocity.y);
             velocity.y *= -bounce; // Bounce
             // Dead if heavy impact
-            if (!isDead && impactSpeed > 15) {
+            if (!isDead && impactSpeed > 15 && deadTextures.length > 0) {
               isDead = true;
               desiredVX = 0;
               velocity.x = 0;
@@ -544,19 +603,34 @@ export function SantaSprite({
                 // Stay down for a bit
                 reviveTimeout = window.setTimeout(() => {
                   if (!isDead) return;
-                  // Play reverse dead to stand up
-                  santa.textures = deadReverseTextures;
-                  santa.animationSpeed = animSpeeds.revive;
-                  santa.loop = false;
-                  santa.play();
+                  // Play reverse dead to stand up (if loaded)
+                  if (deadReverseTextures.length > 0) {
+                    santa.textures = deadReverseTextures;
+                    santa.animationSpeed = animSpeeds.revive;
+                    santa.loop = false;
+                    santa.play();
+                  } else {
+                    // Fallback: skip revive animation if not loaded
+                    isDead = false;
+                    currentAnimation = 'idle';
+                    if (idleTextures.length > 0) {
+                      santa.textures = idleTextures;
+                      santa.loop = true;
+                      santa.animationSpeed = animSpeeds.idle;
+                      santa.play();
+                    }
+                    aiNextActionAt = performance.now() + 1800;
+                  }
                   santa.onComplete = () => {
                     if (!isDead) return;
                     isDead = false;
                     currentAnimation = 'idle';
-                    santa.textures = idleTextures;
-                    santa.loop = true;
-                    santa.animationSpeed = animSpeeds.idle;
-                    santa.play();
+                    if (idleTextures.length > 0) {
+                      santa.textures = idleTextures;
+                      santa.loop = true;
+                      santa.animationSpeed = animSpeeds.idle;
+                      santa.play();
+                    }
                     aiNextActionAt = performance.now() + 1800;
                   };
                 }, 2000);
@@ -592,7 +666,7 @@ export function SantaSprite({
           }
 
           // Switch between idle and jump animations based on grounded state (skip if dead)
-          const isMoving = Math.abs(velocity.x) > 0.5 || Math.abs(velocity.y) > 0.5;
+          const _isMoving = Math.abs(velocity.x) > 0.5 || Math.abs(velocity.y) > 0.5;
           
           if (!isDead) {
             // Trigger a brief slide when landing fast
@@ -619,25 +693,41 @@ export function SantaSprite({
 
             if (slideTimer > 0) {
               slideTimer -= app.ticker.deltaMS;
-              if (currentAnimation !== 'slide') {
+              if (currentAnimation !== 'slide' && slideTextures.length > 0) {
                 currentAnimation = 'slide';
                 santa.onComplete = undefined;
                 santa.textures = slideTextures;
                 santa.animationSpeed = animSpeeds.slide;
                 santa.loop = true;
                 santa.play();
+              } else if (slideTextures.length === 0 && walkTextures.length > 0) {
+                // Fallback to walk if slide not loaded
+                currentAnimation = 'walk';
+                santa.onComplete = undefined;
+                santa.textures = walkTextures;
+                santa.animationSpeed = animSpeeds.walk;
+                santa.loop = true;
+                santa.play();
               }
             } else if (isGrounded && Math.abs(velocity.x) > 4.2) {
-              if (currentAnimation !== 'run') {
+              if (currentAnimation !== 'run' && runTextures.length > 0) {
                 currentAnimation = 'run';
                 santa.onComplete = undefined;
                 santa.textures = runTextures;
                 santa.animationSpeed = animSpeeds.run;
                 santa.loop = true;
                 santa.play();
+              } else if (runTextures.length === 0 && walkTextures.length > 0) {
+                // Fallback to walk if run not loaded
+                currentAnimation = 'walk';
+                santa.onComplete = undefined;
+                santa.textures = walkTextures;
+                santa.animationSpeed = animSpeeds.walk;
+                santa.loop = true;
+                santa.play();
               }
             } else if (isGrounded && Math.abs(velocity.x) > 0.6) {
-              if (currentAnimation !== 'walk') {
+              if (currentAnimation !== 'walk' && walkTextures.length > 0) {
                 currentAnimation = 'walk';
                 santa.onComplete = undefined;
                 santa.textures = walkTextures;
@@ -646,7 +736,7 @@ export function SantaSprite({
                 santa.play();
               }
             } else if (isGrounded && Math.abs(velocity.x) <= 0.6) {
-              if (currentAnimation !== 'idle') {
+              if (currentAnimation !== 'idle' && idleTextures.length > 0) {
                 currentAnimation = 'idle';
                 santa.onComplete = undefined;
                 santa.textures = idleTextures;
@@ -682,7 +772,7 @@ export function SantaSprite({
       window.addEventListener('resize', handleResize);
       window.addEventListener('scroll', markPlatformsDirty, { passive: true });
 
-      return () => {
+      cleanupFn = () => {
         window.removeEventListener('resize', handleResize);
         window.removeEventListener('pointermove', onWindowPointerMove);
         window.removeEventListener('pointerdown', onWindowPointerDown, true as any);
@@ -703,17 +793,42 @@ export function SantaSprite({
           window.clearTimeout(reviveTimeout);
           reviveTimeout = null;
         }
+        // Remove canvas from DOM
+        if (containerRef.current && app?.canvas) {
+          const canvas = app.canvas as HTMLCanvasElement;
+          if (canvas.parentNode === containerRef.current) {
+            containerRef.current.removeChild(canvas);
+          }
+        }
       };
     };
 
-    init();
+    init().then(() => {
+      // Store cleanup function after init completes
+      // The cleanup is already set up in the return statement above
+    });
 
     return () => {
+      isInitializedRef.current = false;
+      santaInstanceCount = Math.max(0, santaInstanceCount - 1);
+      // Call inner cleanup first
+      if (cleanupFn) {
+        cleanupFn();
+        cleanupFn = null;
+      }
+      // Then destroy the app
       if (appRef.current) {
+        // Only destroy if this is the global instance
+        if (globalSantaApp === appRef.current) {
+          globalSantaApp = null;
+        }
         appRef.current.destroy(true, { children: true });
         appRef.current = null;
       }
-      window.removeEventListener('scroll', markPlatformsDirty, true as any);
+      // Clear container
+      if (containerRef.current) {
+        containerRef.current.innerHTML = '';
+      }
     };
   }, [enabled, scale, gravity, bounce, friction]);
 

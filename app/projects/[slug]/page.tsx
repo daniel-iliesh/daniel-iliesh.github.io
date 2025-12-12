@@ -12,6 +12,8 @@ import { fetchResume } from "src/features/resume/api";
 import type { Project } from "src/features/resume/types";
 import { mergeProjectData } from "src/features/projects/merge";
 import { ScrollToTopOnMount } from "app/components/ScrollToTopOnMount";
+import { ResumeProvider } from "app/components/ResumeProvider";
+import { ProjectDetailWrapper } from "app/components/ProjectDetailWrapper";
 
 const DEFAULT_BRANCH = "main";
 const MEDIA_FOLDER = "media";
@@ -64,15 +66,19 @@ export default async function ProjectDetailPage({
   const branch = detail?.branch || (detail as any)?.default_branch || DEFAULT_BRANCH;
   const media = await fetchProjectMedia(slug, MEDIA_FOLDER, branch).catch(() => []);
 
+  // Fetch resume once, will be cached in store
   const resume = await fetchResume().catch(() => null);
-  const resumeProjects = (resume?.projects ?? []) as Project[];
-  const resumeProject = resumeProjects.find(
-    (project) => project?.id === slug || (project?.name && slug === project.name)
-  );
-  const merged = mergeProjectData(resumeProject ?? {}, detail);
 
-
-  const name = merged?.name ?? slug;
+  return (
+    <ResumeProvider initialResume={resume || undefined}>
+      <ProjectDetailWrapper
+        slug={slug}
+        initialDetail={detail}
+        initialMedia={media}
+        initialResume={resume}
+      >
+        {({ detail: cachedDetail, media: cachedMedia, resumeProject, merged }) => {
+          const name = merged?.name ?? slug;
   const description = merged?.description;
   const roles = merged?.roles ?? [];
   const entity = merged?.entity;
@@ -83,24 +89,24 @@ export default async function ProjectDetailPage({
   const endDate = merged?.endDate;
   const dateRange =
     startDate || endDate ? `${startDate ?? "Start"} — ${endDate ?? "Present"}` : null;
-  const visitUrl = merged?.url ?? detail?.url ?? detail?.homepage;
-  const isPrivateRepo = detail?.visibility === "private";
-  const repoUrl =
-    detail?.htmlUrl ??
-    detail?.html_url ??
-    (merged?.id ? `https://github.com/${merged.id}` : undefined) ??
-    (slug.includes("/") ? `https://github.com/${slug}` : undefined);
-  const languages = sortLanguages(detail?.languages);
-  const readmeHtml = detail?.readmeHtml;
-  const blogContent = merged?.blogContent ?? detail?.blogContent;
-  const relatedProjects: RelatedProject[] = (merged?.related ?? detail?.related ?? []).filter(
-    (item): item is RelatedProject => Boolean(item?.id)
-  );
+          const visitUrl = merged?.url ?? cachedDetail?.url ?? cachedDetail?.homepage;
+          const isPrivateRepo = cachedDetail?.visibility === "private";
+          const repoUrl =
+            cachedDetail?.htmlUrl ??
+            cachedDetail?.html_url ??
+            (merged?.id ? `https://github.com/${merged.id}` : undefined) ??
+            (slug.includes("/") ? `https://github.com/${slug}` : undefined);
+          const languages = sortLanguages(cachedDetail?.languages);
+          const readmeHtml = cachedDetail?.readmeHtml;
+          const blogContent = merged?.blogContent ?? cachedDetail?.blogContent;
+          const relatedProjects: RelatedProject[] = (merged?.related ?? cachedDetail?.related ?? []).filter(
+            (item): item is RelatedProject => Boolean(item?.id)
+          );
 
-  const images = media.filter(isImage);
-  const videos = media.filter(isVideo);
-  const coverMedia = pickCover(images);
-  const restImages = coverMedia ? images.filter((m) => m !== coverMedia) : images;
+          const images = cachedMedia.filter(isImage);
+          const videos = cachedMedia.filter(isVideo);
+          const coverMedia = pickCover(images);
+          const restImages = coverMedia ? images.filter((m) => m !== coverMedia) : images;
 
   const galleryItems =
     coverMedia || restImages.length || videos.length
@@ -263,9 +269,9 @@ export default async function ProjectDetailPage({
               <h3 className="text-sm font-semibold text-neutral-800 dark:text-neutral-100">
                 Project write-up
               </h3>
-              {detail?.blogSource && (
+              {cachedDetail?.blogSource && (
                 <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                  Source: {detail.blogSource}
+                  Source: {cachedDetail.blogSource}
                 </p>
               )}
             </div>
@@ -312,15 +318,19 @@ export default async function ProjectDetailPage({
         </article>
       )}
 
-      {!readmeHtml && detail?.readme && (
-        <article className="prose prose-neutral dark:prose-invert max-w-none border border-neutral-200 dark:border-neutral-800 rounded-lg p-4 bg-white dark:bg-neutral-900 whitespace-pre-wrap">
-          {detail.readme}
-        </article>
-      )}
+          {!readmeHtml && cachedDetail?.readme && (
+            <article className="prose prose-neutral dark:prose-invert max-w-none border border-neutral-200 dark:border-neutral-800 rounded-lg p-4 bg-white dark:bg-neutral-900 whitespace-pre-wrap">
+              {cachedDetail.readme}
+            </article>
+          )}
 
-      {galleryItems.length === 0 && null}
-      </section>
-    </PageTransition>
+          {galleryItems.length === 0 && null}
+          </section>
+        </PageTransition>
+        );
+        }}
+      </ProjectDetailWrapper>
+    </ResumeProvider>
   );
 }
 

@@ -4,17 +4,16 @@ import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { Navbar } from "./components/nav";
-import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import Script from "next/script";
 import Footer from "./components/footer";
 import { baseUrl } from "./sitemap";
-import CalComPopupBtn from "./components/calcompopupbtn";
 import { PageTransition } from "./components/PageTransition";
-import { ParallaxBackground } from "./components/ParallaxBackground";
+import { OptimizedParallax } from "./components/OptimizedParallax";
 import { SantaLayer } from "./components/SantaLayer";
 import { SnowOverlay } from "./components/SnowOverlay";
 import { Lightrope } from "./components/Lightrope";
+import { LazyAnalytics } from "./components/LazyAnalytics";
+import { SantaLoadingOverlay } from "./components/SantaLoadingOverlay";
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -95,7 +94,8 @@ export default function RootLayout({
       )}
     >
       <body className="antialiased max-w-xl md:max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto px-3 sm:px-4 mt-4 sm:mt-8">
-        <ParallaxBackground />
+        <SantaLoadingOverlay />
+        <OptimizedParallax />
         {isLightsEnabled && <Lightrope />}
         {isSnowEnabled && <SnowOverlay enabled={isSnowEnabled} />}
         {isSantaEnabled && <SantaLayer />}
@@ -121,11 +121,10 @@ export default function RootLayout({
           <Navbar />
           {children}
           <Footer />
-          <Analytics />
-          <SpeedInsights />
-          <CalComPopupBtn />
-        </main>
+          </main>
         </PageTransition>
+        {/* Load analytics and third-party scripts after page interaction */}
+        <LazyAnalytics />
       </body>
     </html>
   );
