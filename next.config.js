@@ -6,6 +6,8 @@ const nextConfig = {
   trailingSlash: true, // ensure static export generates /blog/index.html, etc. for GH Pages
   images: { unoptimized: true },
   transpilePackages: ["next-mdx-remote"],
+  // Note: For static exports, caching headers should be configured at the hosting level
+  // (e.g., GitHub Pages, Netlify, Vercel). WebP files are optimized for faster loading.
 };
  
 module.exports = nextConfig

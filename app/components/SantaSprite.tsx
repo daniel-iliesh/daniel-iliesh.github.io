@@ -169,34 +169,34 @@ export function SantaSprite({
 
       // Load Idle animation frames
       for (let i = 1; i <= idleFrameCount; i++) {
-        const texture = await PIXI.Assets.load(`/img/SantaSprites/png/Idle (${i}).png`);
+        const texture = await PIXI.Assets.load(`/img/SantaSprites/webp/Idle (${i}).webp`);
         idleTextures.push(texture);
       }
 
       // Load Jump animation frames
       for (let i = 1; i <= jumpFrameCount; i++) {
-        const texture = await PIXI.Assets.load(`/img/SantaSprites/png/Jump (${i}).png`);
+        const texture = await PIXI.Assets.load(`/img/SantaSprites/webp/Jump (${i}).webp`);
         jumpTextures.push(texture);
       }
 
       // Load Walk animation frames
       for (let i = 1; i <= walkFrameCount; i++) {
-        const texture = await PIXI.Assets.load(`/img/SantaSprites/png/Walk (${i}).png`);
+        const texture = await PIXI.Assets.load(`/img/SantaSprites/webp/Walk (${i}).webp`);
         walkTextures.push(texture);
       }
 
       for (let i = 1; i <= runFrameCount; i++) {
-        const texture = await PIXI.Assets.load(`/img/SantaSprites/png/Run (${i}).png`);
+        const texture = await PIXI.Assets.load(`/img/SantaSprites/webp/Run (${i}).webp`);
         runTextures.push(texture);
       }
 
       for (let i = 1; i <= slideFrameCount; i++) {
-        const texture = await PIXI.Assets.load(`/img/SantaSprites/png/Slide (${i}).png`);
+        const texture = await PIXI.Assets.load(`/img/SantaSprites/webp/Slide (${i}).webp`);
         slideTextures.push(texture);
       }
 
       for (let i = 1; i <= deadFrameCount; i++) {
-        const texture = await PIXI.Assets.load(`/img/SantaSprites/png/Dead (${i}).png`);
+        const texture = await PIXI.Assets.load(`/img/SantaSprites/webp/Dead (${i}).webp`);
         deadTextures.push(texture);
       }
       deadReverseTextures = [...deadTextures].slice().reverse();
