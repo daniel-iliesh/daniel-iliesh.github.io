@@ -3,21 +3,18 @@
 import { useResumeStore } from '../../src/stores/resumeStore';
 import { useProjectsStore } from '../../src/stores/projectsStore';
 import { useEffect } from 'react';
+import type { ReactNode } from 'react';
 import type { ProjectDetail, MediaItem } from '../../src/features/projects/types';
 import type { Project } from '../../src/features/resume/types';
 import { mergeProjectData } from '../../src/features/projects/merge';
+import { ProjectDetailContent } from './ProjectDetailContent';
 
 interface ProjectDetailWrapperProps {
   slug: string;
   initialDetail: ProjectDetail | null;
   initialMedia: MediaItem[];
   initialResume: any;
-  children: (data: {
-    detail: ProjectDetail | null;
-    media: MediaItem[];
-    resumeProject: Project | undefined;
-    merged: ReturnType<typeof mergeProjectData>;
-  }) => React.ReactNode;
+  content?: ReactNode;
 }
 
 export function ProjectDetailWrapper({
@@ -25,7 +22,7 @@ export function ProjectDetailWrapper({
   initialDetail,
   initialMedia,
   initialResume,
-  children,
+  content,
 }: ProjectDetailWrapperProps) {
   const resume = useResumeStore((state) => state.resume);
   const setResume = useResumeStore((state) => state.setResume);
@@ -57,6 +54,13 @@ export function ProjectDetailWrapper({
   );
   const merged = mergeProjectData(resumeProject ?? {}, detail ?? undefined);
 
-  return <>{children({ detail, media, resumeProject, merged })}</>;
+  return (
+    <ProjectDetailContent
+      slug={slug}
+      detail={detail}
+      media={media}
+      merged={merged}
+      content={content}
+    />
+  );
 }
-
