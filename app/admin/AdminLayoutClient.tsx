@@ -2,7 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { Sidebar } from "./_components/sidebar";
+import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/app/components/ui/sidebar";
+import { Separator } from "@/app/components/ui/separator";
+import { AdminSidebar } from "./_components/admin-sidebar";
+import { cn } from "@/lib/utils";
 
 export default function AdminLayoutClient({
   children,
@@ -47,10 +50,16 @@ export default function AdminLayoutClient({
     checkAuth();
   }, [pathname, isLoginPage]);
 
+  const handleLogout = async () => {
+    await fetch("/api/auth/logout", { method: "POST" });
+    router.push("/admin/login/");
+    router.refresh();
+  };
+
   // Allow login page to render without any auth check
   if (isLoginPage) {
     return (
-      <div className="flex items-center justify-center bg-white dark:bg-black">
+      <div className="fixed inset-0 flex items-center justify-center bg-background overflow-hidden z-50">
         {children}
       </div>
     );
@@ -59,8 +68,8 @@ export default function AdminLayoutClient({
   // Show loading state while checking authentication
   if (isAuthenticated === null) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-neutral-400">Loading...</div>
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div className="text-muted-foreground">Loading...</div>
       </div>
     );
   }
@@ -70,33 +79,34 @@ export default function AdminLayoutClient({
     return null;
   }
 
-  // Render admin content with sidebar and logout button
+  // Render admin content with sidebar using shadcn sidebar components
   return (
-    <div className="flex h-screen bg-neutral-950 text-white">
-      <Sidebar />
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <header className="flex h-16 items-center justify-between border-b border-neutral-800 bg-neutral-900/50 px-6">
-          <div className="flex items-center gap-4">
-            {user && (
-              <span className="text-sm text-neutral-400">Welcome, {user.username}</span>
-            )}
+    <SidebarProvider>
+      <AdminSidebar user={user} onLogout={handleLogout} />
+      <SidebarInset>
+        <header
+          className={cn(
+            "flex h-12 shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear",
+            "sticky top-0 z-50 overflow-hidden rounded-t-[inherit] bg-background/50 backdrop-blur-md"
+          )}
+        >
+          <div className="flex w-full items-center justify-between px-4 lg:px-6">
+            <div className="flex items-center gap-1 lg:gap-2">
+              <SidebarTrigger className="-ml-1" />
+              <Separator orientation="vertical" className="mx-2 data-[orientation=vertical]:h-4" />
+            </div>
+            <div className="flex items-center gap-2">
+              {user && (
+                <span className="text-sm text-muted-foreground">Welcome, {user.username}</span>
+              )}
+            </div>
           </div>
-          <button
-            onClick={async () => {
-              await fetch("/api/auth/logout", { method: "POST" });
-              router.push("/admin/login/");
-              router.refresh();
-            }}
-            className="rounded-md border border-neutral-700 bg-neutral-800 px-3 py-1.5 text-sm text-neutral-300 transition hover:border-neutral-600 hover:bg-neutral-700 hover:text-white"
-          >
-            Logout
-          </button>
         </header>
-        <main className="flex-1 overflow-y-auto p-6">
+        <div className="h-full p-4 md:p-6 overflow-y-auto">
           {children}
-        </main>
-      </div>
-    </div>
+        </div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
 
