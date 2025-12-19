@@ -3,17 +3,12 @@ import "yet-another-react-lightbox-lite/styles.css";
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
-import { Navbar } from "./components/nav";
 import Script from "next/script";
-import Footer from "./components/footer";
+import ConditionalLayout from "./ConditionalLayout";
 import { baseUrl } from "./sitemap";
 import { PageTransition } from "./components/PageTransition";
-import { OptimizedParallax } from "./components/OptimizedParallax";
-import { SantaLayer } from "./components/SantaLayer";
-import { SnowOverlay } from "./components/SnowOverlay";
-import { Lightrope } from "./components/Lightrope";
+import { ConditionalSeasonalEffects } from "./components/ConditionalSeasonalEffects";
 import { LazyAnalytics } from "./components/LazyAnalytics";
-import { SantaLoadingOverlay } from "./components/SantaLoadingOverlay";
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -94,11 +89,11 @@ export default function RootLayout({
       )}
     >
       <body className="antialiased max-w-xl md:max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto px-3 sm:px-4 mt-4 sm:mt-8">
-        <SantaLoadingOverlay />
-        <OptimizedParallax />
-        {isLightsEnabled && <Lightrope />}
-        {isSnowEnabled && <SnowOverlay enabled={isSnowEnabled} />}
-        {isSantaEnabled && <SantaLayer />}
+        <ConditionalSeasonalEffects
+          isSnowEnabled={isSnowEnabled}
+          isSantaEnabled={isSantaEnabled}
+          isLightsEnabled={isLightsEnabled}
+        />
         {process.env.NODE_ENV === "production" && (
           <>
             <Script
@@ -118,9 +113,7 @@ export default function RootLayout({
         )}
         <PageTransition>
           <main className="flex-auto min-w-0 mt-4 sm:mt-6 flex flex-col">
-          <Navbar />
-          {children}
-          <Footer />
+            <ConditionalLayout>{children}</ConditionalLayout>
           </main>
         </PageTransition>
         {/* Load analytics and third-party scripts after page interaction */}
