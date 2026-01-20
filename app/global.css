@@ -265,21 +265,7 @@ table {
 
 /* Lightrope styles removed (moved to Lightrope.css) */
 
-/* Snow overlay */
-.snow-canvas {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: var(--snow-z);
-}
 
-.santa-interactive {
-  position: relative;
-  overflow: visible;
-  /* border-top: 8px white solid; */
-}
 
 /* Snowed-on styling for Santa platforms
 

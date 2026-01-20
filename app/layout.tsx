@@ -107,7 +107,7 @@ export default function RootLayout({
       )}
     >
       <body className="antialiased max-w-xl md:max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto px-3 sm:px-4 mt-4 sm:mt-8">
-        <SantaLoadingOverlay />
+        {isSantaEnabled && <SantaLoadingOverlay />}
         <OptimizedParallax />
         {isLightsEnabled && <Lightrope />}
         {isSnowEnabled && <SnowOverlay enabled={isSnowEnabled} />}

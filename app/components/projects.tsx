@@ -70,7 +70,11 @@ export function Projects({ projects }: ProjectsProps) {
           return (
             <article
               key={project.name}
-              className={`santa-interactive relative flex flex-col space-y-2 p-3 sm:p-4 rounded-lg border border-neutral-200/70 dark:border-neutral-800/70 shadow-sm hover:shadow-md transition-colors duration-300 hover:bg-neutral-50 dark:hover:bg-neutral-900/50 group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 overflow-hidden ${
+              className={`${
+                process.env.NEXT_PUBLIC_ENABLE_SANTA === "true"
+                  ? "santa-interactive"
+                  : ""
+              } relative flex flex-col space-y-2 p-3 sm:p-4 rounded-lg border border-neutral-200/70 dark:border-neutral-800/70 shadow-sm hover:shadow-md transition-colors duration-300 hover:bg-neutral-50 dark:hover:bg-neutral-900/50 group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 overflow-hidden ${
                 hasCover ? "" : "bg-black text-white"
               }`}
               tabIndex={slug ? 0 : -1}
