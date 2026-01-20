@@ -1,0 +1,24 @@
+:root {
+  /* Santa Sprite configuration */
+  --santa-scale: 0.15;
+  --santa-gravity: 0.5;
+  --santa-bounce: 0.4;
+  --santa-friction: 0.98;
+
+  /* Santa interactive snow styling */
+  --santa-snow-cap: rgba(255, 255, 255, 0.9);
+  --santa-snow-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  --santa-icicle-light: rgba(255, 255, 255, 0.88);
+  --santa-icicle-dark: rgba(200, 220, 255, 0.55);
+  --santa-snow-cap-inset-x: 6px;
+  --santa-snow-cap-offset-y: 8px;
+  --santa-icicle-inset-x: 4px;
+  --santa-icicle-offset-y: 10px;
+  --santa-snow-depth: 18px;
+}
+
+.santa-interactive {
+  position: relative;
+  overflow: visible;
+  border-top: 8px white solid;
+}

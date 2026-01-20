@@ -1,0 +1,145 @@
+:root {
+  /* Lightrope */
+  --lightrope-globe-width: 12px;
+  --lightrope-globe-height: 28px;
+  --lightrope-globe-spacing: 40px;
+  --lightrope-globe-spread: 3px;
+  --lightrope-light-off: 0.4;
+}
+
+/* Lightrope */
+.lightrope {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 0;
+  margin: -15px 0 0 0;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.lightrope li {
+  position: relative;
+  list-style: none;
+  display: inline-block;
+  width: var(--lightrope-globe-width);
+  height: var(--lightrope-globe-height);
+  border-radius: 50%;
+  margin: calc(var(--lightrope-globe-spacing) / 2);
+  background: rgba(0, 247, 165, 1);
+  box-shadow: 0px calc(var(--lightrope-globe-height) / 6)
+    calc(var(--lightrope-globe-width) * 2) var(--lightrope-globe-spread)
+    rgba(0, 247, 165, 1);
+  animation-name: flash-1;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+}
+
+.lightrope li:nth-child(2n + 1) {
+  background: rgba(0, 255, 255, 1);
+  box-shadow: 0px calc(var(--lightrope-globe-height) / 6)
+    calc(var(--lightrope-globe-width) * 2) var(--lightrope-globe-spread)
+    rgba(0, 255, 255, 0.5);
+  animation-name: flash-2;
+  animation-duration: 0.4s;
+}
+
+.lightrope li:nth-child(4n + 2) {
+  background: rgba(247, 0, 148, 1);
+  box-shadow: 0px calc(var(--lightrope-globe-height) / 6)
+    calc(var(--lightrope-globe-width) * 2) var(--lightrope-globe-spread)
+    rgba(247, 0, 148, 1);
+  animation-name: flash-3;
+  animation-duration: 1.1s;
+}
+
+.lightrope li:nth-child(odd) {
+  animation-duration: 1.8s;
+}
+
+.lightrope li:nth-child(3n + 1) {
+  animation-duration: 1.4s;
+}
+
+.lightrope li::before {
+  content: '';
+  position: absolute;
+  background: #222;
+  width: calc(var(--lightrope-globe-width) - 2px);
+  height: calc(var(--lightrope-globe-height) / 3);
+  border-radius: 3px;
+  top: calc(0px - (var(--lightrope-globe-height) / 6));
+  left: 1px;
+}
+
+.lightrope li::after {
+  content: '';
+  position: absolute;
+  top: calc(0px - var(--lightrope-globe-height) / 2);
+  left: calc(var(--lightrope-globe-width) - 3px);
+  width: calc(var(--lightrope-globe-spacing) + 12px);
+  height: calc((var(--lightrope-globe-height) / 3) * 2);
+  border-bottom: solid #222 2px;
+  border-radius: 50%;
+}
+
+.lightrope li:last-child::after {
+  content: none;
+}
+
+.lightrope li:first-child {
+  margin-left: calc(var(--lightrope-globe-spacing) * -1);
+}
+
+@keyframes flash-1 {
+  0%,
+  100% {
+    background: rgba(0, 247, 165, 1);
+    box-shadow: 0px calc(var(--lightrope-globe-height) / 6)
+      calc(var(--lightrope-globe-width) * 2) var(--lightrope-globe-spread)
+      rgba(0, 247, 165, 1);
+  }
+  50% {
+    background: rgba(0, 247, 165, var(--lightrope-light-off));
+    box-shadow: 0px calc(var(--lightrope-globe-height) / 6)
+      calc(var(--lightrope-globe-width) * 2) var(--lightrope-globe-spread)
+      rgba(0, 247, 165, 0.2);
+  }
+}
+
+@keyframes flash-2 {
+  0%,
+  100% {
+    background: rgba(0, 255, 255, 1);
+    box-shadow: 0px calc(var(--lightrope-globe-height) / 6)
+      calc(var(--lightrope-globe-width) * 2) var(--lightrope-globe-spread)
+      rgba(0, 255, 255, 1);
+  }
+  50% {
+    background: rgba(0, 255, 255, var(--lightrope-light-off));
+    box-shadow: 0px calc(var(--lightrope-globe-height) / 6)
+      calc(var(--lightrope-globe-width) * 2) var(--lightrope-globe-spread)
+      rgba(0, 255, 255, 0.2);
+  }
+}
+
+@keyframes flash-3 {
+  0%,
+  100% {
+    background: rgba(247, 0, 148, 1);
+    box-shadow: 0px calc(var(--lightrope-globe-height) / 6)
+      calc(var(--lightrope-globe-width) * 2) var(--lightrope-globe-spread)
+      rgba(247, 0, 148, 1);
+  }
+  50% {
+    background: rgba(247, 0, 148, var(--lightrope-light-off));
+    box-shadow: 0px calc(var(--lightrope-globe-height) / 6)
+      calc(var(--lightrope-globe-width) * 2) var(--lightrope-globe-spread)
+      rgba(247, 0, 148, 0.2);
+  }
+}

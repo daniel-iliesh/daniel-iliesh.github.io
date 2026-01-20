@@ -1,6 +1,8 @@
-'use client';
+"use client";
 
-import { memo, useEffect, useRef } from 'react';
+import "./Snow.css";
+
+import { memo, useEffect, useRef } from "react";
 
 interface SnowOverlayProps {
   enabled?: boolean;
@@ -21,7 +23,7 @@ const rand = (min: number, max: number) => Math.random() * (max - min) + min;
 export const SnowOverlay = memo(function SnowOverlay({
   enabled = true,
   count = 150,
-  color = 'white',
+  color = "white",
 }: SnowOverlayProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const frameRef = useRef<number | null>(null);
@@ -33,7 +35,7 @@ export const SnowOverlay = memo(function SnowOverlay({
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     const initFlakes = () => {
@@ -97,11 +99,11 @@ export const SnowOverlay = memo(function SnowOverlay({
     resize();
     lastTimeRef.current = performance.now();
     frameRef.current = requestAnimationFrame(loop);
-    window.addEventListener('resize', resize);
+    window.addEventListener("resize", resize);
 
     return () => {
       if (frameRef.current) cancelAnimationFrame(frameRef.current);
-      window.removeEventListener('resize', resize);
+      window.removeEventListener("resize", resize);
     };
   }, [enabled, count, color]);
 
@@ -109,4 +111,3 @@ export const SnowOverlay = memo(function SnowOverlay({
 
   return <canvas ref={canvasRef} className="snow-canvas" aria-hidden="true" />;
 });
-

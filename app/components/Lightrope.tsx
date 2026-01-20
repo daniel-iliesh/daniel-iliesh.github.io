@@ -1,4 +1,5 @@
-'use client';
+"use client";
+import "./Lightrope.css";
 
 /**
  * Decorative lightrope across the top of the page.
@@ -15,4 +16,3 @@ export function Lightrope() {
     </ul>
   );
 }
-

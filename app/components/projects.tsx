@@ -29,13 +29,17 @@ export function Projects({ projects }: ProjectsProps) {
       {projects
         .filter((project) => project?.name)
         .map((project) => {
-          const slug = project.id || (project.name ? slugifyProjectId(project.name) : undefined);
+          const slug =
+            project.id ||
+            (project.name ? slugifyProjectId(project.name) : undefined);
 
           const metadataParts: string[] = [];
           const startDate = project.startDate;
           const endDate = project.endDate;
           const dateRange =
-            startDate || endDate ? `${startDate ?? "Start"} — ${endDate ?? "Present"}` : null;
+            startDate || endDate
+              ? `${startDate ?? "Start"} — ${endDate ?? "Present"}`
+              : null;
           const roles = project.roles?.filter(Boolean) ?? [];
           const projectTypeInfo = getProjectTypeInfo(project.type);
           const description = project.description;
@@ -55,8 +59,8 @@ export function Projects({ projects }: ProjectsProps) {
             project.id && project.id.includes("/")
               ? `https://github.com/${project.id}`
               : project.url && project.url.includes("github.com")
-              ? project.url
-              : null;
+                ? project.url
+                : null;
           const isPrivateRepo = project.isPrivate;
 
           const coverUrl = project.coverUrl ?? null;
@@ -109,8 +113,8 @@ export function Projects({ projects }: ProjectsProps) {
 
               <div className="relative space-y-2">
                 <div className="flex flex-col sm:flex-row flex-wrap items-start sm:items-center justify-between gap-2 sm:gap-4">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <h2
                         className={`font-bold text-lg sm:text-xl tracking-tight transition-colors break-words ${
                           hasCover
@@ -118,18 +122,18 @@ export function Projects({ projects }: ProjectsProps) {
                             : "text-neutral-900 dark:text-neutral-100 group-hover:text-black dark:group-hover:text-white"
                         }`}
                       >
-                      {project.name}
-                    </h2>
-                    {project.type && (
-                      <span
-                        className={`px-2 py-1 rounded-md text-xs font-medium ${projectTypeInfo.color} flex-shrink-0`}
-                        title={projectTypeInfo.description}
-                      >
-                        {projectTypeInfo.label}
-                      </span>
-                    )}
+                        {project.name}
+                      </h2>
+                      {project.type && (
+                        <span
+                          className={`px-2 py-1 rounded-md text-xs font-medium ${projectTypeInfo.color} flex-shrink-0`}
+                          title={projectTypeInfo.description}
+                        >
+                          {projectTypeInfo.label}
+                        </span>
+                      )}
+                    </div>
                   </div>
-                </div>
                   <div className="flex flex-wrap items-center gap-2 sm:gap-2 self-start sm:self-auto min-h-[32px]">
                     {repoUrl && !isPrivateRepo && (
                       <a
@@ -143,46 +147,54 @@ export function Projects({ projects }: ProjectsProps) {
                         <Github size={16} strokeWidth={2} />
                       </a>
                     )}
-                {project.url && (
-                  <a
-                    href={project.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    {project.url && (
+                      <a
+                        href={project.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold text-white bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 rounded-md transition-colors duration-200 whitespace-nowrap flex-shrink-0 touch-manipulation shadow-sm hover:shadow-md self-start sm:self-start"
                         onClick={(event) => event.stopPropagation()}
                         aria-label="Visit project"
-                  >
-                        <ExternalLink size={14} strokeWidth={2} aria-hidden="true" />
+                      >
+                        <ExternalLink
+                          size={14}
+                          strokeWidth={2}
+                          aria-hidden="true"
+                        />
                         <span className="hidden sm:inline">Visit</span>
-                  </a>
-                )}
+                      </a>
+                    )}
                   </div>
-              </div>
+                </div>
 
-              {metadataParts.length > 0 && (
+                {metadataParts.length > 0 && (
                   <p
                     className={`text-sm ${
-                      hasCover ? "text-neutral-200" : "text-neutral-500 dark:text-neutral-400"
+                      hasCover
+                        ? "text-neutral-200"
+                        : "text-neutral-500 dark:text-neutral-400"
                     }`}
                   >
                     {metadataParts.join(" · ")}
-                </p>
-              )}
+                  </p>
+                )}
                 {description && (
                   <p
                     className={`text-sm sm:text-base tracking-tight leading-relaxed ${
-                      hasCover ? "text-neutral-100" : "text-neutral-800 dark:text-neutral-200"
+                      hasCover
+                        ? "text-neutral-100"
+                        : "text-neutral-800 dark:text-neutral-200"
                     }`}
                   >
                     {description}
-                </p>
-              )}
+                  </p>
+                )}
 
-              {project.keywords && project.keywords.length > 0 && (
-                <ul className="flex flex-wrap gap-1.5 sm:gap-2 pt-2">
-                  {project.keywords.filter(Boolean).map((keyword) => (
-                    <li
-                      key={keyword}
+                {project.keywords && project.keywords.length > 0 && (
+                  <ul className="flex flex-wrap gap-1.5 sm:gap-2 pt-2">
+                    {project.keywords.filter(Boolean).map((keyword) => (
+                      <li
+                        key={keyword}
                         className={`px-2 py-1 rounded-md text-xs font-medium transition-colors duration-200 touch-manipulation relative group/tooltip cursor-pointer ${
                           hasCover
                             ? "bg-white/15 text-white border border-white/20 hover:bg-white/20"
@@ -190,14 +202,17 @@ export function Projects({ projects }: ProjectsProps) {
                         }`}
                         onClick={(event) => {
                           event.stopPropagation();
-                          window.open(`https://www.google.com/search?q=${keyword}`, "_blank");
-                      }}
-                    >
-                      {keyword}
-                    </li>
-                  ))}
-                </ul>
-              )}
+                          window.open(
+                            `https://www.google.com/search?q=${keyword}`,
+                            "_blank",
+                          );
+                        }}
+                      >
+                        {keyword}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             </article>
           );

@@ -1,11 +1,12 @@
-'use client';
+"use client";
 
-import { usePathname } from 'next/navigation';
-import { LazySanta } from './LazySanta';
+import { usePathname } from "next/navigation";
+import { LazySanta } from "./LazySanta";
+import "./Santa.css";
 
 export function SantaLayer() {
   const pathname = usePathname();
-  if (pathname?.startsWith('/santa-game')) return null;
+  if (pathname?.startsWith("/santa-game")) return null;
 
   return (
     <LazySanta
@@ -17,4 +18,3 @@ export function SantaLayer() {
     />
   );
 }
-

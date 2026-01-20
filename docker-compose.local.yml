@@ -4,7 +4,11 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        NEXT_PUBLIC_THEBACKEND_API_BASE_URL: "https://thebackend.rocket-champ.pw"
+        NEXT_PUBLIC_THEBACKEND_API_BASE_URL: "${NEXT_PUBLIC_THEBACKEND_API_BASE_URL:-https://thebackend.rocket-champ.pw}"
+        NEXT_PUBLIC_ENABLE_SNOW: "${NEXT_PUBLIC_ENABLE_SNOW:-false}"
+        NEXT_PUBLIC_ENABLE_SANTA: "${NEXT_PUBLIC_ENABLE_SANTA:-false}"
+        NEXT_PUBLIC_ENABLE_LIGHTROPE: "${NEXT_PUBLIC_ENABLE_LIGHTROPE:-false}"
+        NEXT_PUBLIC_ENABLE_PROJECTS_SNOW: "${NEXT_PUBLIC_ENABLE_PROJECTS_SNOW:-false}"
     container_name: nextjs-web
     ports:
       - "3000:3000"
