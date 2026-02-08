@@ -10,6 +10,7 @@ import { baseUrl } from "./sitemap";
 import { PageTransition } from "./components/PageTransition";
 import { OptimizedParallax } from "./components/OptimizedParallax";
 import { LazyAnalytics } from "./components/LazyAnalytics";
+import GoogleCalPopupBtn from "./components/googlecalpopupbtn";
 import dynamic from "next/dynamic";
 
 const SantaLayer = dynamic(() =>
@@ -138,6 +139,8 @@ export default function RootLayout({
         </PageTransition>
         {/* Load analytics and third-party scripts after page interaction */}
         <LazyAnalytics />
+        {/* Booking button - loads immediately */}
+        <GoogleCalPopupBtn />
       </body>
     </html>
   );
