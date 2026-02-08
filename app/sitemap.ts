@@ -2,6 +2,8 @@ import { getBlogPosts } from 'app/blog/utils'
 
 export const baseUrl = 'https://daniel-iliesh.github.io'
 
+export const dynamic = 'force-static'
+
 export default async function sitemap() {
   let blogs = getBlogPosts().map((post) => ({
     url: `${baseUrl}/blog/${post.slug}`,
