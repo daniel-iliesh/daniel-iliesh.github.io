@@ -23,10 +23,10 @@ export async function generateStaticParams() {
   const resumeProjects = (resume?.projects ?? []) as Project[];
 
   return resumeProjects
-    .map(
-      (project) =>
-        project.id || (project.name ? slugifyProjectId(project.name) : null),
-    )
+    .map((project) => {
+      const rawId = project.id || project.name;
+      return rawId ? slugifyProjectId(rawId) : null;
+    })
     .filter(Boolean)
     .map((slug) => ({ slug: slug as string }));
 }
@@ -36,10 +36,25 @@ export default async function ProjectDetailPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const { slug: slugParam } = await params;
-  const slug = decodeURIComponent(slugParam);
+  const { slug: urlSlug } = await params;
 
-  const detail = await fetchProjectDetail(slug, DEFAULT_BRANCH).catch(
+  // Fetch resume to find the original project ID
+  const resume = await fetchResume().catch(() => null);
+  const resumeProjects = (resume?.projects ?? []) as Project[];
+
+  // Find project by matching slugified ID
+  const resumeProject = resumeProjects.find((project) => {
+    const rawId = project.id || project.name;
+    return rawId && slugifyProjectId(rawId) === urlSlug;
+  });
+
+  if (!resumeProject) {
+    notFound();
+  }
+
+  // Use the original ID for API calls
+  const originalId = resumeProject.id || resumeProject.name || urlSlug;
+  const detail = await fetchProjectDetail(originalId, DEFAULT_BRANCH).catch(
     () => null,
   );
 
@@ -49,19 +64,10 @@ export default async function ProjectDetailPage({
 
   const branch =
     detail?.branch || (detail as any)?.default_branch || DEFAULT_BRANCH;
-  const media = await fetchProjectMedia(slug, MEDIA_FOLDER, branch).catch(
+  const media = await fetchProjectMedia(originalId, MEDIA_FOLDER, branch).catch(
     () => [],
   );
 
-  // Fetch resume once, will be cached in store
-  const resume = await fetchResume().catch(() => null);
-
-  // Check if there's blog content to render as MDX
-  const resumeProjects = (resume?.projects ?? []) as any[];
-  const resumeProject = resumeProjects.find(
-    (project) =>
-      project?.id === slug || (project?.name && slug === project.name),
-  );
   const merged = mergeProjectData(resumeProject ?? {}, detail ?? undefined);
   const blogContent = merged?.blogContent ?? detail?.blogContent;
 
@@ -74,7 +80,7 @@ export default async function ProjectDetailPage({
   return (
     <ResumeProvider initialResume={resume || undefined}>
       <ProjectDetailWrapper
-        slug={slug}
+        slug={urlSlug}
         initialDetail={detail}
         initialMedia={media}
         initialResume={resume}

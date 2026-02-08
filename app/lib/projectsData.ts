@@ -32,17 +32,25 @@ export async function fetchMergedProjects(): Promise<ProjectWithCover[]> {
   const resume = await fetchResume({ revalidate: 3600 });
   const resumeProjects = (resume?.projects ?? []) as Project[];
 
-  const slugs = resumeProjects
-    .map((project) => project.id || (project.name ? slugifyProjectId(project.name) : null))
-    .filter(Boolean) as string[];
+  const projectsWithIds = resumeProjects
+    .map((project) => {
+      const originalId = project.id || project.name;
+      if (!originalId) return null;
+      return {
+        project,
+        originalId,
+        urlSlug: slugifyProjectId(originalId),
+      };
+    })
+    .filter(Boolean) as { project: Project; originalId: string; urlSlug: string }[];
 
   const merged = await Promise.all(
-    slugs.map(async (slug) => {
+    projectsWithIds.map(async ({ project, originalId, urlSlug }) => {
       let detail: ProjectDetail | null = null;
       let coverUrl: string | null = null;
 
       try {
-        detail = await fetchProjectDetail(slug, "main");
+        detail = await fetchProjectDetail(originalId, "main");
       } catch {
         detail = null;
       }
@@ -50,21 +58,18 @@ export async function fetchMergedProjects(): Promise<ProjectWithCover[]> {
       const branch = detail?.branch || (detail as any)?.default_branch || "main";
 
       try {
-        const medias = await fetchProjectMedia(slug, "media", branch);
+        const medias = await fetchProjectMedia(originalId, "media", branch);
         const cover = pickCover(medias.filter(isImage));
         coverUrl = cover ? mediaUrl(cover) : null;
       } catch {
         coverUrl = null;
       }
 
-      const resumeProject = resumeProjects.find(
-        (project) => project?.id === slug || (project?.name && slug === slugifyProjectId(project.name))
-      );
-
-      const mergedProject = mergeProjectData(resumeProject ?? {}, detail ?? undefined);
+      const mergedProject = mergeProjectData(project ?? {}, detail ?? undefined);
 
       return {
         ...mergedProject,
+        id: urlSlug, // Use URL-safe slug as the ID for linking
         coverUrl,
         isPrivate: detail?.visibility === "private",
       };
@@ -73,4 +78,3 @@ export async function fetchMergedProjects(): Promise<ProjectWithCover[]> {
 
   return merged;
 }
-
