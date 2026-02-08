@@ -34,5 +34,5 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy out --project-name=daniel-ilies
+          command: pages deploy out --project-name=daniel-ilies --commit-dirty=true
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
