@@ -29,6 +29,14 @@ jobs:
         env:
           BUILD_STANDALONE: false 
 
+      - name: Create Cloudflare Pages Project (if needed)
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages project create daniel-ilies --production-branch main
+        continue-on-error: true  # Ignore if project already exists
+
       - name: Publish to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
